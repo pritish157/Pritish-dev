@@ -1,175 +1,205 @@
 import { motion } from 'framer-motion'
+import { currentlyLearning, domainCoverage, skillCategories, toolEcosystem } from '../content/siteContent'
+import Reveal from './ui/Reveal'
 
-const SKILLS = [
-  { name: 'React', level: 80, category: 'Frontend', color: '#06B6D4' },
-  { name: 'Node.js', level: 82, category: 'Backend', color: '#22C55E' },
-  { name: 'MongoDB', level: 78, category: 'Database', color: '#22C55E' },
-  { name: 'Express', level: 80, category: 'Backend', color: '#8B5CF6' },
-  { name: 'JavaScript', level: 85, category: 'Language', color: '#F59E0B' },
-  { name: 'Java', level: 70, category: 'Language', color: '#F97316' },
-  { name: 'Socket.IO', level: 72, category: 'Backend', color: '#8B5CF6' },
-  { name: 'Git/GitHub', level: 78, category: 'Tools', color: '#F1F5F9' },
-  { name: 'REST API', level: 83, category: 'Backend', color: '#8B5CF6' },
-  { name: 'MySQL', level: 65, category: 'Database', color: '#3B82F6' },
-  { name: 'HTML/CSS', level: 88, category: 'Frontend', color: '#06B6D4' },
-  { name: 'Python', level: 60, category: 'Language', color: '#F59E0B' },
-]
-
-const RADAR_SKILLS = [
-  { label: 'Frontend', value: 85 },
-  { label: 'Backend', value: 80 },
-  { label: 'Database', value: 75 },
-  { label: 'DevOps', value: 55 },
-  { label: 'AI/ML', value: 50 },
-  { label: 'DSA', value: 65 },
-]
-
-function RadarChart({ skills, size = 200 }) {
+function RadarChart({ items, size = 320 }) {
   const center = size / 2
-  const radius = size * 0.38
-  const n = skills.length
-  const angleStep = (2 * Math.PI) / n
+  const radius = size * 0.33
+  const angleStep = (Math.PI * 2) / items.length
 
-  const getPoint = (i, r) => {
-    const angle = i * angleStep - Math.PI / 2
-    return { x: center + r * Math.cos(angle), y: center + r * Math.sin(angle) }
+  const pointFor = (index, factor) => {
+    const angle = angleStep * index - Math.PI / 2
+
+    return {
+      x: center + Math.cos(angle) * radius * factor,
+      y: center + Math.sin(angle) * radius * factor,
+    }
   }
 
-  const gridLevels = [0.25, 0.5, 0.75, 1]
-  const dataPath = skills
-    .map((s, i) => {
-      const pt = getPoint(i, radius * (s.value / 100))
-      return `${i === 0 ? 'M' : 'L'}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`
+  const valuePath = items
+    .map((item, index) => {
+      const point = pointFor(index, item.value / 100)
+      return `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)},${point.y.toFixed(2)}`
     })
     .join(' ') + ' Z'
 
   return (
-    <svg width="100%" viewBox={`0 0 ${size} ${size}`} className="max-w-[220px]" role="img" aria-label="Skill domain coverage radar chart">
-      {gridLevels.map(level => {
-        const pts = skills.map((_, i) => getPoint(i, radius * level))
-        const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z'
-        return <path key={level} d={d} fill="none" stroke="rgba(139,92,246,0.12)" strokeWidth="1" />
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      className="mx-auto w-full max-w-[340px]"
+      role="img"
+      aria-label="Skill domain coverage radar chart"
+    >
+      {[0.25, 0.5, 0.75, 1].map((step) => {
+        const path = items
+          .map((_, index) => {
+            const point = pointFor(index, step)
+            return `${index === 0 ? 'M' : 'L'}${point.x.toFixed(2)},${point.y.toFixed(2)}`
+          })
+          .join(' ') + ' Z'
+
+        return <path key={step} d={path} fill="none" stroke="rgba(140, 200, 255, 0.12)" strokeWidth="1" />
       })}
-      {skills.map((_, i) => {
-        const outer = getPoint(i, radius)
-        return <line key={i} x1={center} y1={center} x2={outer.x} y2={outer.y} stroke="rgba(139,92,246,0.15)" strokeWidth="1" />
-      })}
-      <path d={dataPath} fill="rgba(139,92,246,0.15)" stroke="url(#radarGrad)" strokeWidth="2" />
-      {skills.map((s, i) => {
-        const pt = getPoint(i, radius * (s.value / 100))
-        return <circle key={`dot-${i}`} cx={pt.x} cy={pt.y} r="3.5" fill="#8B5CF6" stroke="#050510" strokeWidth="2" />
-      })}
-      {skills.map((s, i) => {
-        const pt = getPoint(i, radius * 1.25)
+
+      {items.map((_, index) => {
+        const outerPoint = pointFor(index, 1)
+
         return (
-          <text key={`lbl-${i}`} x={pt.x} y={pt.y} textAnchor="middle" dominantBaseline="middle"
-            fontSize="8.5" fill="#94A3B8" fontFamily="Inter, sans-serif" fontWeight="500">
-            {s.label}
+          <line
+            key={`line-${index}`}
+            x1={center}
+            y1={center}
+            x2={outerPoint.x}
+            y2={outerPoint.y}
+            stroke="rgba(140, 200, 255, 0.12)"
+            strokeWidth="1"
+          />
+        )
+      })}
+
+      <path d={valuePath} fill="rgba(98, 224, 193, 0.14)" stroke="url(#skill-radar)" strokeWidth="2" />
+
+      {items.map((item, index) => {
+        const point = pointFor(index, item.value / 100)
+        return <circle key={item.label} cx={point.x} cy={point.y} r="4" fill="#62E0C1" stroke="#07111f" strokeWidth="3" />
+      })}
+
+      {items.map((item, index) => {
+        const point = pointFor(index, 1.18)
+
+        return (
+          <text
+            key={`${item.label}-label`}
+            x={point.x}
+            y={point.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="#c3d1e6"
+            fontFamily="Space Grotesk, sans-serif"
+            fontSize="12"
+          >
+            {item.label}
           </text>
         )
       })}
+
       <defs>
-        <linearGradient id="radarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#8B5CF6" />
-          <stop offset="100%" stopColor="#06B6D4" />
+        <linearGradient id="skill-radar" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#62E0C1" />
+          <stop offset="100%" stopColor="#8CC8FF" />
         </linearGradient>
       </defs>
     </svg>
   )
 }
 
-function SkillBar({ skill, index }) {
+function SkillCard({ category, index }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -16 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.05 }}
-      className="flex items-center gap-2 sm:gap-3"
-    >
-      <div className="w-16 sm:w-[88px] text-xs text-slate-300 font-medium text-right shrink-0">
-        {skill.name}
-      </div>
-      <div className="flex-1 h-1.5 rounded-full bg-white/6">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: `linear-gradient(90deg, ${skill.color}, ${skill.color}99)` }}
-          initial={{ width: 0 }}
-          whileInView={{ width: `${skill.level}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.75, delay: index * 0.05, ease: 'easeOut' }}
+    <Reveal className="surface-card skill-card" delay={index * 0.05}>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-xl font-semibold tracking-tight text-[var(--color-text-primary)]">{category.title}</h3>
+          <p className="mt-2 text-sm leading-7 text-[var(--color-text-secondary)]">{category.summary}</p>
+        </div>
+        <span
+          className="h-3 w-3 rounded-full shadow-[0_0_0_8px_rgba(255,255,255,0.03)]"
+          style={{ backgroundColor: category.accent }}
+          aria-hidden="true"
         />
       </div>
-      <div className="w-8 text-xs text-text-muted font-mono">{skill.level}%</div>
-    </motion.div>
+
+      <div className="mt-5 grid gap-4">
+        {category.items.map((item) => (
+          <div key={item.name} className="skill-bar">
+            <div className="skill-bar__row">
+              <div>
+                <p className="text-sm font-medium text-[var(--color-text-primary)]">{item.name}</p>
+                <p className="text-xs text-[var(--color-text-soft)]">{item.detail}</p>
+              </div>
+              <span className="text-sm font-semibold text-[var(--color-text-primary)]">{item.level}%</span>
+            </div>
+            <div className="skill-bar__track">
+              <motion.div
+                className="skill-bar__fill"
+                initial={{ width: 0 }}
+                whileInView={{ width: `${item.level}%` }}
+                viewport={{ once: true, amount: 0.6 }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Reveal>
   )
 }
 
-const CATEGORIES = ['Frontend', 'Backend', 'Database', 'Language', 'Tools']
-const CATEGORY_COLORS = { Frontend: '#06B6D4', Backend: '#8B5CF6', Database: '#22C55E', Language: '#F59E0B', Tools: '#F1F5F9' }
+export default function Skills({ compact = false }) {
+  const visibleCategories = compact ? skillCategories.slice(0, 2) : skillCategories
 
-export default function Skills() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
-      {/* Left: Skill bars */}
-      <div className="flex flex-col gap-6 sm:gap-8">
-        {CATEGORIES.map(cat => {
-          const catSkills = SKILLS.filter(s => s.category === cat)
-          if (!catSkills.length) return null
-          return (
-            <div key={cat}>
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                <div className="w-[7px] h-[7px] rounded-full" style={{ background: CATEGORY_COLORS[cat] }} />
-                <span className="font-mono text-[11px] text-text-muted">{cat}</span>
+    <div className="space-y-5">
+      <div className="skill-grid items-start">
+        <Reveal className="surface-panel">
+          <p className="section-eyebrow">Domain strength</p>
+          <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
+            Balanced across product UI, backend systems, and real-world integrations.
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">
+            The strongest areas are API design, responsive React interfaces, authentication, and full-stack product
+            flows that need both polish and structure.
+          </p>
+
+          <div className="mt-6">
+            <RadarChart items={domainCoverage} />
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {domainCoverage.map((item) => (
+              <div key={item.label} className="surface-tile">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-text-soft)]">{item.label}</p>
+                <p className="mt-2 text-base font-semibold text-[var(--color-text-primary)]">{item.value}%</p>
               </div>
-              <div className="flex flex-col gap-2.5 sm:gap-3">
-                {catSkills.map((s, i) => <SkillBar key={s.name} skill={s} index={i} />)}
-              </div>
-            </div>
-          )
-        })}
+            ))}
+          </div>
+        </Reveal>
+
+        <div className="grid gap-5">
+          {visibleCategories.map((category, index) => (
+            <SkillCard key={category.title} category={category} index={index} />
+          ))}
+        </div>
       </div>
 
-      {/* Right: Radar + Tools */}
-      <div className="flex flex-col gap-5">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="glass p-5 rounded-3xl flex flex-col items-center"
-        >
-          <div className="font-mono text-[11px] text-text-muted mb-4 self-start">// domain_coverage</div>
-          <RadarChart skills={RADAR_SKILLS} size={220} />
-          <div className="grid grid-cols-3 gap-3 mt-4 w-full">
-            {RADAR_SKILLS.map(s => (
-              <div key={s.label} className="text-center">
-                <div className="text-sm font-bold text-purple-300">{s.value}%</div>
-                <div className="text-[10px] text-text-muted">{s.label}</div>
-              </div>
+      <div className={`grid gap-5 ${compact ? 'md:grid-cols-2' : 'lg:grid-cols-2'}`}>
+        <Reveal className="surface-card">
+          <h3 className="subsection-title">Tool ecosystem</h3>
+          <p className="mt-2 text-sm leading-7 text-[var(--color-text-secondary)]">
+            Tools I use to move from local build to deployment and presentation-quality delivery.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {(compact ? toolEcosystem.slice(0, 6) : toolEcosystem).map((tool) => (
+              <span key={tool} className="soft-chip">
+                {tool}
+              </span>
             ))}
           </div>
-        </motion.div>
+        </Reveal>
 
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="glass p-5 rounded-3xl">
-          <div className="font-mono text-[11px] text-text-muted mb-4">// tools_and_environment</div>
-          <div className="flex flex-wrap gap-1.5">
-            {['VS Code', 'Postman', 'Git', 'GitHub', 'Render', 'Vercel', 'MongoDB Atlas', 'Figma', 'Linux CLI'].map(tool => (
-              <span key={tool} className="tag tag-blue">{tool}</span>
+        <Reveal className="surface-card" delay={0.05}>
+          <h3 className="subsection-title">Currently learning</h3>
+          <p className="mt-2 text-sm leading-7 text-[var(--color-text-secondary)]">
+            Expanding the stack toward stronger contracts, deployment maturity, and practical AI system design.
+          </p>
+          <ul className="mt-5 space-y-3">
+            {(compact ? currentlyLearning.slice(0, 3) : currentlyLearning).map((item) => (
+              <li key={item} className="feature-row">
+                <span className="feature-dot" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
             ))}
-          </div>
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="glass p-5 rounded-3xl border-accent-cyan/20">
-          <div className="font-mono text-[11px] text-accent-cyan mb-3">// currently_learning</div>
-          <div className="flex flex-wrap gap-1.5">
-            {['TypeScript', 'Docker', 'Redis', 'LangChain', 'Next.js'].map(item => (
-              <span key={item} className="tag tag-cyan">{item}</span>
-            ))}
-          </div>
-        </motion.div>
+          </ul>
+        </Reveal>
       </div>
     </div>
   )

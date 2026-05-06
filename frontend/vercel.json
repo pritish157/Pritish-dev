@@ -5,7 +5,7 @@
       "destination": "https://pritish-dev.onrender.com/api/:path*"
     },
     {
-      "source": "/((?!assets|favicon|og-image|robots|sitemap).*)",
+      "source": "/((?!api/|assets/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ],
@@ -27,15 +27,15 @@
       ]
     },
     {
-      "source": "/(.*).svg",
+      "source": "/(.*)\\.(svg|png|jpg|jpeg|webp|avif|ico|pdf|woff2)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
       ]
     },
     {
-      "source": "/og-image.png",
+      "source": "/(robots.txt|sitemap.xml|site.webmanifest)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800" }
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=3600" }
       ]
     }
   ]

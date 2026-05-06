@@ -1,159 +1,164 @@
-import { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { ArrowRight, Download, Menu, X } from 'lucide-react'
+import { primaryNav, siteConfig } from '../content/siteContent'
 
-const NAV_LINKS = [
-  { to: '/about',    label: 'About' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/skills',   label: 'Skills' },
-  { to: '/contact',  label: 'Contact' },
-]
+function navLinkClass({ isActive }) {
+  return `nav-link${isActive ? ' nav-link--active' : ''}`
+}
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
+  const { pathname } = useLocation()
+  const { scrollY, scrollYProgress } = useScroll()
+
+  useMotionValueEvent(scrollY, 'change', (current) => {
+    const previous = scrollY.getPrevious() ?? 0
+    const scrollingDown = current > previous
+
+    setIsScrolled(current > 10)
+    setIsHidden(!isOpen && current > 120 && scrollingDown)
+  })
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    setIsOpen(false)
+    setIsHidden(false)
+  }, [pathname])
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setMobileOpen(false)
-  }, [])
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+
+    const previousOverflow = document.body.style.overflow
+
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = previousOverflow || ''
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen])
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 h-[var(--navbar-h)] transition-all duration-300 ${
-          scrolled
-            ? 'bg-bg-primary/95 backdrop-blur-2xl border-b border-accent-purple/12 shadow-lg shadow-black/10'
-            : 'bg-transparent border-b border-transparent'
-        }`}
-        role="banner"
-      >
-        <nav className="max-w-[1280px] mx-auto px-5 sm:px-8 h-full flex items-center justify-between" role="navigation" aria-label="Main navigation">
-          {/* Logo */}
-          <NavLink to="/" className="flex items-center gap-2.5 no-underline group" aria-label="Home — Pritish Kumar Panda">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-white font-black text-sm shrink-0 shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
+    <motion.header
+      className="nav-shell"
+      animate={{ y: isHidden ? -110 : 0 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="nav-shell__inner">
+        <motion.div
+          className={`nav-bar ${isScrolled ? 'nav-bar--scrolled' : ''} ${isOpen ? 'nav-bar--open' : ''}`}
+          initial={{ y: -28, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <NavLink to="/" className="nav-brand" aria-label={`${siteConfig.name} home page`}>
+            <span className="nav-brand__mark" aria-hidden="true">
               P
-            </div>
-            <span className="gradient-text font-mono font-bold text-sm tracking-[0.2em]">
-              PRITISH.DEV
+            </span>
+            <span className="nav-brand__text">
+              <strong>{siteConfig.name}</strong>
+              <span>{siteConfig.role} / {siteConfig.secondaryRole}</span>
             </span>
           </NavLink>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1.5">
-            {NAV_LINKS.map(link => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={({ isActive }) =>
-                  `relative px-4 py-2.5 text-sm font-medium rounded-xl no-underline transition-all duration-250 ${
-                    isActive
-                      ? 'text-purple-300 bg-accent-purple/10 border border-accent-purple/25 shadow-sm shadow-purple-500/5'
-                      : 'text-text-muted border border-transparent hover:text-text-primary hover:bg-white/3'
-                  }`
-                }
-              >
-                {link.label}
+          <nav className="nav-links" aria-label="Primary navigation">
+            {primaryNav.map((item) => (
+              <NavLink key={item.to} to={item.to} end={item.to === '/'} className={navLinkClass}>
+                {item.label}
               </NavLink>
             ))}
-          </div>
+          </nav>
 
-          {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-3">
-            <a href="/resume.pdf" download className="btn-ghost !py-2.5 !px-5 !text-xs" rel="noopener noreferrer">
-              📄 Resume
+          <div className="nav-cta">
+            <span className="nav-badge nav-badge--desktop">{siteConfig.availability}</span>
+            <a href={siteConfig.resumePath} download className="secondary-button nav-cta__resume" rel="noreferrer">
+              <Download size={16} />
+              Resume
             </a>
-            <NavLink to="/contact" className="btn-primary !py-2.5 !px-5 !text-xs">
-              Hire Me →
+            <NavLink to="/contact" className="primary-button nav-cta__hire">
+              Hire Me
+              <ArrowRight size={16} />
             </NavLink>
           </div>
 
-          {/* Mobile: Resume + Hamburger */}
-          <div className="md:hidden flex items-center gap-2">
-            <a href="/resume.pdf" download className="btn-ghost !py-2 !px-3 !text-xs" rel="noopener noreferrer">
-              📄
-            </a>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl border border-border-base bg-bg-surface text-text-muted transition-colors"
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileOpen}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                {mobileOpen ? (
-                  <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>
-                ) : (
-                  <><line x1="4" y1="7" x2="20" y2="7" /><line x1="4" y1="12" x2="16" y2="12" /><line x1="4" y1="17" x2="12" y2="17" /></>
-                )}
-              </svg>
-            </button>
-          </div>
-        </nav>
-      </motion.header>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-bg-primary/95 backdrop-blur-2xl md:hidden"
-            onClick={() => setMobileOpen(false)}
+          <button
+            type="button"
+            className="icon-button menu-button"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              className="pt-[calc(var(--navbar-h)+24px)] px-6 flex flex-col gap-2"
-              onClick={e => e.stopPropagation()}
-            >
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
-                  key={link.to}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <NavLink
-                    to={link.to}
-                    onClick={() => setMobileOpen(false)}
-                    className={({ isActive }) =>
-                      `block px-5 py-4 text-lg font-semibold rounded-2xl no-underline transition-all ${
-                        isActive
-                          ? 'text-purple-300 bg-accent-purple/10 border border-accent-purple/25'
-                          : 'text-text-secondary border border-transparent hover:bg-white/3'
-                      }`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                </motion.div>
-              ))}
+            {isOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
 
-              <div className="border-t border-border-base mt-4 pt-4 flex flex-col gap-3">
-                <NavLink to="/contact" onClick={() => setMobileOpen(false)} className="btn-primary justify-center text-base">
-                  Hire Me →
-                </NavLink>
-                <a href="/resume.pdf" download className="btn-ghost justify-center text-base" rel="noopener noreferrer">
-                  📄 Download Resume
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          <motion.div className="nav-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
+        </motion.div>
+
+        <AnimatePresence>
+          {isOpen ? (
+            <>
+              <motion.button
+                type="button"
+                className="nav-backdrop"
+                aria-label="Close menu overlay"
+                onClick={() => setIsOpen(false)}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+
+              <motion.div
+                id="mobile-navigation"
+                className="nav-drawer"
+                initial={{ opacity: 0, y: -18, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -14, scale: 0.98 }}
+                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <nav className="nav-drawer__links" aria-label="Mobile navigation">
+                  {primaryNav.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.to === '/'}
+                      className={({ isActive }) =>
+                        `nav-drawer__link${isActive ? ' nav-drawer__link--active' : ''}`
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </nav>
+
+                <div className="mt-4 grid gap-3">
+                  <a href={siteConfig.resumePath} download className="secondary-button justify-center" rel="noreferrer">
+                    <Download size={16} />
+                    Download Resume
+                  </a>
+                  <NavLink to="/contact" className="primary-button justify-center">
+                    Start a Conversation
+                    <ArrowRight size={16} />
+                  </NavLink>
+                </div>
+              </motion.div>
+            </>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   )
 }

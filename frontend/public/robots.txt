@@ -1,9 +1,6 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-
-# Sitemap
-Sitemap: https://pritish-dev.vercel.app/sitemap.xml
-
-# Block private/API paths
 Disallow: /api/
+
+Host: https://pritish-dev.vercel.app
+Sitemap: https://pritish-dev.vercel.app/sitemap.xml

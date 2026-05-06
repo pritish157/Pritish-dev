@@ -1,46 +1,64 @@
 import { NavLink } from 'react-router-dom'
-
-const FOOTER_LINKS = [
-  { to: '/about',    label: 'About' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/skills',   label: 'Skills' },
-  { to: '/contact',  label: 'Contact' },
-]
+import { ArrowUpRight } from 'lucide-react'
+import { primaryNav, siteConfig, toolEcosystem } from '../content/siteContent'
 
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-accent-purple/8 bg-bg-primary/90" role="contentinfo">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Brand */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-white font-black text-sm shadow-lg shadow-purple-500/15">
-              P
-            </div>
-            <div>
-              <div className="font-bold text-sm gradient-text tracking-wide">PRITISH KUMAR PANDA</div>
-              <div className="text-xs text-slate-500 mt-0.5">MERN Stack Developer · Full Stack Engineer</div>
+    <footer className="footer-shell" role="contentinfo">
+      <div className="section-shell">
+        <div className="surface-panel footer-card">
+          <div>
+            <p className="section-eyebrow">Portfolio</p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
+              {siteConfig.name}
+            </h2>
+            <p className="mt-3 max-w-md text-sm leading-7 text-[var(--color-text-secondary)]">
+              {siteConfig.role} building premium React interfaces, strong Node.js APIs, and product-ready systems
+              that help recruiters see value quickly.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {siteConfig.socialLinks.map((link) => (
+                <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="soft-chip">
+                  {link.shortLabel}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Links */}
-          <nav className="flex gap-6 sm:gap-8 text-sm text-slate-500" aria-label="Footer navigation">
-            {FOOTER_LINKS.map(link => (
-              <NavLink key={link.to} to={link.to} className="hover:text-purple-400 transition-colors duration-200">
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+          <div>
+            <h3 className="subsection-title">Explore</h3>
+            <nav className="mt-4 grid gap-3" aria-label="Footer navigation">
+              {primaryNav.map((item) => (
+                <NavLink key={item.to} to={item.to} end={item.to === '/'} className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+                  {item.label}
+                </NavLink>
+              ))}
+            </nav>
+          </div>
 
-          {/* Copyright */}
-          <div className="text-xs text-slate-600 font-mono text-center">
-            © {year} Pritish Kumar Panda
+          <div>
+            <h3 className="subsection-title">Quick recruiter view</h3>
+            <div className="mt-4 grid gap-3 text-sm text-[var(--color-text-secondary)]">
+              <p>{siteConfig.availability}</p>
+              <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-2 text-[var(--color-text-primary)]">
+                {siteConfig.email}
+                <ArrowUpRight size={15} />
+              </a>
+              <p>{toolEcosystem.slice(0, 4).join(' · ')}</p>
+              <a href={siteConfig.resumePath} download className="text-button w-fit">
+                Download Resume
+              </a>
+            </div>
           </div>
         </div>
+
+        <div className="mt-4 flex flex-col gap-3 text-sm text-[var(--color-text-dim)] sm:flex-row sm:items-center sm:justify-between">
+          <p>Built with React, Vite, Tailwind CSS, Framer Motion, and deployment-ready SEO foundations.</p>
+          <p>&copy; {year} {siteConfig.name}</p>
+        </div>
       </div>
-      <div className="h-[var(--bottomnav-h)] md:hidden" aria-hidden="true" />
     </footer>
   )
 }

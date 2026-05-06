@@ -1,0 +1,23 @@
+{
+  "name": "Pritish Kumar Panda Portfolio",
+  "short_name": "Pritish.dev",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "description": "Portfolio of Pritish Kumar Panda, MERN Stack Developer and Full Stack Developer in India.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

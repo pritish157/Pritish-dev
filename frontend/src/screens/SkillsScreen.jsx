@@ -1,32 +1,34 @@
-import { motion } from 'framer-motion'
+import PageLayout from '../components/PageLayout'
 import Skills from '../components/Skills'
-
-const screenVariants = {
-  initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] } },
-  exit:    { opacity: 0, y: -12, transition: { duration: 0.2 } },
-}
+import Seo from '../components/seo/Seo'
+import Reveal from '../components/ui/Reveal'
 
 export default function SkillsScreen() {
   return (
-    <motion.div className="screen section-glow-cyan" variants={screenVariants} initial="initial" animate="animate" exit="exit">
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 50% 30% at 60% 25%, rgba(6,182,212,0.04) 0%, transparent 70%)',
-      }} aria-hidden="true" />
+    <>
+      <Seo pageKey="skills" />
+      <PageLayout
+        eyebrow="Capability map"
+        title="Frontend polish, backend structure, and the stack needed to ship real products."
+        description="This is a practical skill map rather than keyword stuffing. The emphasis is on technologies I can use to deliver complete product experiences with confidence."
+      >
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              ['Primary strength', 'MERN systems with responsive UI and backend architecture'],
+              ['Technical edge', 'Auth, realtime flows, dashboard UX, and integrations'],
+              ['Growth direction', 'TypeScript, Docker, caching, and stronger AI workflows'],
+            ].map(([label, value]) => (
+              <Reveal key={label} className="surface-tile">
+                <p className="text-xs uppercase tracking-[0.16em] text-[var(--color-text-soft)]">{label}</p>
+                <p className="mt-2 text-sm leading-7 text-[var(--color-text-secondary)]">{value}</p>
+              </Reveal>
+            ))}
+          </div>
 
-      <section className="screen-content" aria-label="Skills and tech stack">
-        <header className="screen-header">
-          <div className="tag tag-cyan mb-4">skill.matrix</div>
-          <h1 className="screen-title">
-            <span className="gradient-text">Tech Stack</span> & Proficiency
-          </h1>
-          <p className="screen-subtitle">
-            Honest self-assessment of skills and tools I use daily to build production systems.
-          </p>
-        </header>
-
-        <Skills />
-      </section>
-    </motion.div>
+          <Skills />
+        </div>
+      </PageLayout>
+    </>
   )
 }
