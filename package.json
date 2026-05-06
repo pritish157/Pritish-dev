@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix backend",
+    "install-all": "npm install --prefix backend && npm install --prefix frontend"
+  }
+}
