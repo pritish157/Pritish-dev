@@ -1,4 +1,14 @@
 {
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://portfolio-backend-0wxi.onrender.com/api/:path*"
+    },
+    {
+      "source": "/((?!assets|favicon|og-image|robots|sitemap).*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
