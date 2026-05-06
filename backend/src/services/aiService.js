@@ -1,61 +1,68 @@
 /**
- * AI Service — Business logic for AI chat with Redis caching.
- * Caches identical questions to reduce OpenAI API calls and latency.
+ * AI service for portfolio chat with lightweight RAG and optional OpenAI.
+ * Retrieved portfolio documents are used for grounding and source chips.
  */
 const crypto = require('crypto')
 const config = require('../config')
 const logger = require('../utils/logger')
 const { cacheGet, cacheSet } = require('../config/redis')
-const { queryKnowledge } = require('../data/knowledgeBase')
+const { buildKnowledgeContext, formatCitations, queryKnowledge, retrieveKnowledge } = require('../data/knowledgeBase')
 const { sanitizeString } = require('../utils/sanitize')
 
-// Optional OpenAI client
 let openai = null
+
 if (config.openai.apiKey) {
   try {
     const { OpenAI } = require('openai')
     openai = new OpenAI({ apiKey: config.openai.apiKey })
-    logger.info('✅ OpenAI connected — AI assistant using GPT-4o-mini')
+    logger.info('OpenAI connected - portfolio assistant using GPT-4o-mini')
   } catch {
-    logger.info('openai package not installed — using local RAG')
+    logger.info('openai package not installed - using local RAG')
   }
 }
 
-const SYSTEM_PROMPT = `You are a helpful AI assistant embedded in Pritish Kumar Panda's developer portfolio.
-Pritish is a final-year CSE student and MERN stack Application Developer.
+const SYSTEM_PROMPT = `You are the portfolio AI assistant for Pritish Kumar Panda.
+Answer clearly and recruiter-focused.
+Use the retrieved portfolio context as the source of truth wherever possible.
+Never invent experience beyond the portfolio.
+If the question asks about availability, resume highlights, or engineering mindset, answer using portfolio proof points and hiring-ready language.
+Keep answers under 120 words and use concise, professional tone.`
 
-Projects:
-1. Event Management System (MERN) — JWT auth, role-based access (Admin/Organizer/Attendee), event CRUD, Nodemailer email confirmations, 18+ API endpoints.
-2. Knot of Love — Matrimonial platform with Socket.IO real-time chat, read receipts, KYC verification (Multer), match discovery, block/archive system, Firebase FCM push notifications, admin dashboard, deployed on Render + Vercel.
-3. Image Steganography System — LSB bit-level encoding, client-side Canvas API, encode and decode text in PNG images.
+function sanitizeHistory(history) {
+  if (!Array.isArray(history)) return []
 
-Skills: React, Node.js, Express, MongoDB, Socket.IO, JWT, Nodemailer, Firebase, Multer, Tailwind CSS, Framer Motion, Java, Python, Git.
-Contact: pritishpanda157@gmail.com | LinkedIn: linkedin.com/in/pritish-kumar-panda-dev/ | GitHub: github.com/pritish157
-Career Goal: Application Developer role — backend-heavy full-stack, ideally with real-time or AI features.
+  return history
+    .map((entry) => ({
+      role: entry?.role === 'assistant' ? 'assistant' : 'user',
+      content: sanitizeString(entry?.content || '').slice(0, 500),
+    }))
+    .filter((entry) => entry.content)
+    .slice(-8)
+}
 
-Answer the user's question concisely and helpfully using this context. Keep responses under 150 words.`
+function getCacheKey(message, history = []) {
+  const normalizedMessage = message.toLowerCase().trim().replace(/\s+/g, ' ')
+  const normalizedHistory = history
+    .map((entry) => `${entry.role}:${entry.content.toLowerCase().trim().replace(/\s+/g, ' ')}`)
+    .join('|')
+  const hash = crypto.createHash('md5').update(`${normalizedHistory}::${normalizedMessage}`).digest('hex')
 
-/**
- * Generate a cache key from the user's message.
- */
-function getCacheKey(message) {
-  const normalized = message.toLowerCase().trim().replace(/\s+/g, ' ')
-  const hash = crypto.createHash('md5').update(normalized).digest('hex')
   return `ai:chat:${hash}`
 }
 
-/**
- * Process an AI chat message.
- * @param {string} rawMessage
- * @returns {Promise<{ reply: string, source: string, cached: boolean }>}
- */
-async function processChat(rawMessage) {
+async function processChat(rawMessage, history = []) {
   const message = sanitizeString(rawMessage).slice(0, 500)
-  if (!message) throw new Error('Message is required')
 
-  const cacheKey = getCacheKey(message)
+  if (!message) {
+    throw new Error('Message is required')
+  }
 
-  // ── Check cache first ──
+  const sanitizedHistory = sanitizeHistory(history)
+  const retrievalQuery = [...sanitizedHistory.slice(-2).map((entry) => entry.content), message].join(' ')
+  const matches = retrieveKnowledge(retrievalQuery)
+  const citations = formatCitations(matches)
+  const cacheKey = getCacheKey(message, sanitizedHistory)
+
   const cached = await cacheGet(cacheKey)
   if (cached) {
     logger.debug({ cacheKey }, 'AI cache HIT')
@@ -64,30 +71,47 @@ async function processChat(rawMessage) {
 
   let result
 
-  // ── Path 1: OpenAI ──
   if (openai) {
     try {
       const completion = await openai.chat.completions.create({
         model: config.openai.model,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: message },
+          ...sanitizedHistory,
+          {
+            role: 'user',
+            content: `Question: ${message}
+
+Retrieved portfolio context:
+${buildKnowledgeContext(matches)}
+
+Answer using only the retrieved context when possible. If something is not covered, say that briefly.`,
+          },
         ],
         max_tokens: config.openai.maxTokens,
         temperature: config.openai.temperature,
       })
+
       const reply = completion.choices[0]?.message?.content?.trim() || 'No response generated.'
-      result = { reply, source: 'openai' }
+      result = {
+        reply,
+        source: 'openai-rag',
+        citations,
+      }
     } catch (err) {
-      logger.error({ err: err.message }, 'OpenAI call failed — falling back to RAG')
-      result = { reply: queryKnowledge(message), source: 'rag-fallback' }
+      logger.error({ err: err.message }, 'OpenAI call failed - falling back to local RAG')
+      result = {
+        ...queryKnowledge(message, matches),
+        source: 'rag-fallback',
+      }
     }
   } else {
-    // ── Path 2: Local RAG ──
-    result = { reply: queryKnowledge(message), source: 'rag' }
+    result = {
+      ...queryKnowledge(message, matches),
+      source: 'rag',
+    }
   }
 
-  // ── Cache the result ──
   await cacheSet(cacheKey, result, config.redis.aiCacheTTL)
   logger.debug({ cacheKey, source: result.source }, 'AI cache SET')
 

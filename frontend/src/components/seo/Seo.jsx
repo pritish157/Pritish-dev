@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { pageMeta, projects, siteConfig, skillCategories } from '../../content/siteContent'
+import { pageMeta, projects, siteConfig, skillExperienceTabs } from '../../content/siteContent'
 
 function upsertMeta(selector, attributes) {
   let element = document.head.querySelector(selector)
@@ -133,17 +133,25 @@ function buildSchema(page) {
   }
 
   if (page.key === 'skills') {
+    const skillTerms = skillExperienceTabs.flatMap((tab) => [
+      ...(tab.cards?.map((card) => ({
+        '@type': 'DefinedTerm',
+        name: card.title,
+        description: card.meta ?? card.detail,
+        inDefinedTermSet: `${siteConfig.siteUrl}/skills`,
+      })) ?? []),
+      ...(tab.chips?.map((chip) => ({
+        '@type': 'DefinedTerm',
+        name: chip,
+        description: 'Tool or workflow used in product engineering delivery.',
+        inDefinedTermSet: `${siteConfig.siteUrl}/skills`,
+      })) ?? []),
+    ])
+
     graph.push({
       '@type': 'DefinedTermSet',
       name: 'Technical Skills',
-      hasDefinedTerm: skillCategories.flatMap((category) =>
-        category.items.map((item) => ({
-          '@type': 'DefinedTerm',
-          name: item.name,
-          description: item.detail,
-          inDefinedTermSet: `${siteConfig.siteUrl}/skills`,
-        })),
-      ),
+      hasDefinedTerm: skillTerms,
     })
   }
 

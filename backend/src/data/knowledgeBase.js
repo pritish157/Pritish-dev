@@ -1,108 +1,309 @@
 /**
- * RAG Knowledge Base — Pritish Kumar Panda
- * Used by the AI assistant to answer questions about projects, skills, and background.
+ * Lightweight portfolio RAG knowledge base.
+ * Retrieves the most relevant portfolio documents and turns them into
+ * compact answers with section-level citations for the frontend chatbot.
  */
 
-const knowledge = [
-  // ── IDENTITY ──
+const portfolioDocuments = [
   {
-    keywords: ['who', 'pritish', 'about', 'introduce', 'yourself', 'background', 'name'],
-    reply: `Pritish Kumar Panda is a final-year CSE student and Application Developer specializing in the MERN stack (MongoDB, Express, React, Node.js). He builds production-grade systems — from real-time matchmaking platforms to AI-integrated apps. He's currently open to full-time and internship opportunities.`,
+    id: 'profile-overview',
+    title: 'Profile overview',
+    category: 'Overview',
+    anchor: '/#skills',
+    keywords: ['who is pritish', 'about', 'background', 'introduce', 'profile', 'full stack', 'mern', 'engineer'],
+    summary:
+      'Pritish Kumar Panda is a full-stack MERN engineer focused on production-ready systems, secure workflows, real-time features, and AI-ready product experiences.',
+    details: [
+      'He is a final-year CSE student targeting remote full-time and internship roles where he can own both backend workflows and user-facing polish.',
+      'His strongest proof points are authentication flows, real-time messaging, deployment readiness, and compact product UX.',
+    ],
   },
-  // ── CAREER / GOAL ──
   {
-    keywords: ['goal', 'career', 'job', 'role', 'target', 'looking', 'opportunity', 'hire', 'work'],
-    reply: `Pritish's career goal is to work as an Application Developer in backend-heavy full-stack roles — owning features from database schema design to deployed UI. He targets companies where he can ship real systems with Node.js, Express, and MongoDB, ideally with real-time or AI-integrated components.`,
+    id: 'knot-of-love',
+    title: 'Knot of Love',
+    category: 'Project',
+    anchor: '/#projects',
+    keywords: ['knot of love', 'matrimonial', 'matchmaking', 'socket.io', 'chat', 'kyc', 'notifications', 'push'],
+    summary:
+      'Knot of Love is a production-style matrimonial platform built with MERN, Socket.IO, Firebase push notifications, and KYC moderation workflows.',
+    details: [
+      'The system includes real-time chat, read receipts, block and archive safety controls, profile discovery filters, and admin-side KYC approval.',
+      'It demonstrates backend-heavy feature ownership across messaging, trust and safety, file uploads, notifications, and deployment.',
+    ],
   },
-  // ── MATRIMONIAL APP ──
   {
-    keywords: ['matrimonial', 'knot', 'love', 'match', 'wedding', 'marriage', 'matching'],
-    reply: `"Knot of Love" is a full-stack matrimonial platform built with the MERN stack. It includes: real-time chat via Socket.IO with read receipts, KYC verification with document upload (Multer), match discovery with filtering, block/archive/report safety features, Firebase Cloud Messaging for offline push notifications, a full admin dashboard for user moderation and KYC approval, and is fully deployed on Render (backend) and Vercel (frontend).`,
+    id: 'event-management',
+    title: 'Event Management System',
+    category: 'Project',
+    anchor: '/#projects',
+    keywords: ['event management', 'events', 'booking', 'registration', 'organizer', 'attendee', 'nodemailer', 'rbac'],
+    summary:
+      'The Event Management System is a MERN application built around role-based operations, event workflows, and transactional communication.',
+    details: [
+      'It includes JWT authentication, admin and organizer controls, event CRUD, capacity handling, registration flows, and email confirmations through Nodemailer.',
+      'This project is the clearest proof of structured API design, business rules, and operations-focused backend workflow design.',
+    ],
   },
-  // ── EVENT MANAGEMENT ──
   {
-    keywords: ['event', 'management', 'ticket', 'booking', 'registration', 'organizer'],
-    reply: `The Event Management System is a MERN app with role-based access for Admins, Organizers, and Attendees. Key features: JWT authentication with role-based control, event creation with capacity limits and deadlines, one-click registration with Nodemailer email confirmation, admin dashboard with CRUD and attendee list, and search/filter by category and date. It has 18+ API endpoints and 5 MongoDB collections.`,
+    id: 'image-steganography',
+    title: 'Image Steganography System',
+    category: 'Project',
+    anchor: '/#projects',
+    keywords: ['steganography', 'image', 'lsb', 'canvas', 'encode', 'decode', 'png', 'secret message'],
+    summary:
+      'The Image Steganography System is a browser-based tool that hides and extracts text inside PNG files using LSB encoding and the Canvas API.',
+    details: [
+      'Everything runs client-side, so no image upload is required for encoding or decoding.',
+      'It shows algorithmic problem solving, attention to data handling, and a clean product wrapper around low-level image manipulation.',
+    ],
   },
-  // ── STEGANOGRAPHY ──
   {
-    keywords: ['steganography', 'steg', 'image', 'lsb', 'hide', 'secret', 'pixel', 'encode', 'decode'],
-    reply: `The Image Steganography System is a web tool that uses LSB (Least Significant Bit) encoding to hide secret text messages inside PNG images without visible quality loss. Everything runs in-browser using the Canvas API — no server upload needed. It supports encode mode (text → hidden image download) and decode mode (extract hidden message from image).`,
+    id: 'auth-security',
+    title: 'Authentication and security',
+    category: 'Capability',
+    anchor: '/#case-studies',
+    keywords: ['authentication', 'auth', 'security', 'jwt', 'rbac', 'bcrypt', 'login', 'token', 'password reset'],
+    summary:
+      'Authentication and access control are one of Pritish\'s strongest engineering themes across the portfolio.',
+    details: [
+      'He has implemented JWT-based auth, role-based access control, bcrypt password protection, secure reset flows, rate limiting, and session-aware workflows.',
+      'That pattern shows up most clearly in the Event Management System and in moderation and trust features across Knot of Love.',
+    ],
   },
-  // ── REAL-TIME ──
   {
-    keywords: ['real-time', 'realtime', 'socket', 'websocket', 'chat', 'live', 'instant'],
-    reply: `Yes! Pritish has built real-time features using Socket.IO. In the Knot of Love matrimonial platform, he implemented live messaging with read receipts, user presence indicators, and event broadcasting. He understands WebSocket lifecycle, room management, and graceful disconnection handling.`,
+    id: 'realtime-systems',
+    title: 'Real-time systems',
+    category: 'Capability',
+    anchor: '/#case-studies',
+    keywords: ['real-time', 'realtime', 'socket', 'websocket', 'live chat', 'presence', 'read receipts', 'instant'],
+    summary:
+      'Pritish has real proof with real-time features through Socket.IO-based messaging and interaction flows.',
+    details: [
+      'Knot of Love includes live messaging, read receipts, presence-aware communication, and broadcast-style updates.',
+      'This shows understanding of connection lifecycle, state synchronization, and event-driven product behavior.',
+    ],
   },
-  // ── AUTHENTICATION ──
   {
-    keywords: ['auth', 'authentication', 'jwt', 'login', 'security', 'password', 'token', 'bcrypt', 'session'],
-    reply: `Pritish has strong experience with authentication systems: JWT access and refresh tokens, bcrypt password hashing, role-based access control (Admin/User roles), email verification flows, password reset with secure tokens, rate limiting, and session management. He has also implemented all-device logout via JWT token versioning.`,
+    id: 'deployment-performance',
+    title: 'Deployment and production thinking',
+    category: 'Capability',
+    anchor: '/#case-studies',
+    keywords: ['deployment', 'production', 'render', 'vercel', 'cors', 'environment variables', 'performance', 'hosting'],
+    summary:
+      'The portfolio emphasizes production-minded delivery, not just demos, with deployed frontend and backend systems plus operational safeguards.',
+    details: [
+      'Pritish has deployed React frontends to Vercel and Express backends to Render while managing cross-origin configuration, environment setup, and debugging in hosted environments.',
+      'He also focuses on responsive UX, performance tuning, and reducing interface friction so the frontend feels product-ready rather than academic.',
+    ],
   },
-  // ── TECH STACK ──
   {
-    keywords: ['stack', 'tech', 'technology', 'tools', 'language', 'use', 'know', 'skill'],
-    reply: `Pritish's core stack is MERN: MongoDB, Express.js, React (Vite), Node.js. Additional skills include: Socket.IO, JWT, Nodemailer, Firebase FCM, Multer (file uploads), Tailwind CSS, Framer Motion, Axios, and Git/GitHub. He also knows Java and Python, and is learning TypeScript, Docker, and Redis.`,
+    id: 'ai-rag',
+    title: 'AI and RAG work',
+    category: 'Capability',
+    anchor: '/#skills',
+    keywords: ['ai', 'rag', 'chatbot', 'llm', 'openai', 'gpt', 'assistant', 'langchain', 'vector database'],
+    summary:
+      'Pritish is actively building AI-assisted web experiences, including this portfolio chatbot with retrieval-augmented grounding.',
+    details: [
+      'He understands how to connect LLM APIs into MERN applications and how retrieval helps ground responses in project-specific context.',
+      'He is also exploring broader production AI tooling such as LangChain patterns and vector-database-backed retrieval.',
+    ],
   },
-  // ── MONGODB ──
   {
-    keywords: ['mongodb', 'database', 'mongoose', 'atlas', 'nosql', 'schema', 'model'],
-    reply: `Pritish works with MongoDB and Mongoose for database design. He designs schemas for complex relationships — users, matches, messages, events, and tickets. He uses MongoDB Atlas for production deployments and has experience with indexing, aggregation, and population of references.`,
+    id: 'engineering-mindset',
+    title: 'Engineering mindset',
+    category: 'Mindset',
+    anchor: '/#about',
+    keywords: ['engineering mindset', 'product thinking', 'systems design', 'scalability', 'maintainability', 'clean code'],
+    summary:
+      'Pritish combines product-first thinking with backend-first architecture, prioritizing secure services, observability, and polished UX.',
+    details: [
+      'He chooses patterns that support maintainable growth and future team handoff, such as clear API boundaries, role-based auth, and deployable feature flows.',
+      'His portfolio emphasizes production readiness: error handling, logging, responsive interfaces, and accessible experiences.',
+    ],
   },
-  // ── DEPLOYMENT ──
   {
-    keywords: ['deploy', 'deployment', 'production', 'render', 'vercel', 'hosting', 'live', 'deployed'],
-    reply: `Pritish has deployed full-stack apps to production: Node/Express backends on Render, React frontends on Vercel. He handles environment variable configuration, CORS hardening for cross-origin production requests, and has experience troubleshooting WebSocket connections in deployed environments.`,
+    id: 'resume-highlights',
+    title: 'Resume highlights',
+    category: 'Resume',
+    anchor: '/#about',
+    keywords: ['resume', 'cv', 'experience', 'summary', 'highlights', 'profile'],
+    summary:
+      'Pritish is a MERN Stack Developer with experience delivering real-time systems, authentication flows, and deployable web apps with strong backend foundations.',
+    details: [
+      'His resume highlights MERN delivery, Socket.IO real-time chat, JWT-based auth, email workflows, and AI-integrated applications.',
+      'He also has experience with Java, Python, Docker, and is continuously improving deployment and performance practices.',
+    ],
   },
-  // ── AI ──
   {
-    keywords: ['ai', 'artificial intelligence', 'openai', 'gpt', 'llm', 'rag', 'chatbot', 'machine learning', 'ml'],
-    reply: `Pritish is actively exploring AI integration in web apps. He has built a RAG-based assistant (this chatbot!) and understands how to connect LLM APIs like OpenAI into MERN applications. He's also studied ML basics and built a Rainfall Prediction model using Python. His current learning path includes LangChain and vector databases for production RAG systems.`,
+    id: 'availability',
+    title: 'Availability and contact',
+    category: 'Contact',
+    anchor: '/#contact',
+    keywords: ['available', 'availability', 'hire', 'job', 'internship', 'remote', 'open to work'],
+    summary:
+      'Pritish is open to remote and hybrid full-time opportunities, with recruiter-friendly availability for backend-heavy full-stack roles.',
+    details: [
+      'He is actively looking for roles where he can own backend architecture, system integration, and complete product delivery.',
+      'Reach him via email at pritishpanda157@gmail.com or through LinkedIn and GitHub links on the portfolio.',
+    ],
   },
-  // ── PROJECTS COUNT ──
   {
-    keywords: ['project', 'built', 'created', 'made', 'work', 'portfolio'],
-    reply: `Pritish has built 3 major systems: (1) Event Management System — MERN with role-based auth and email notifications; (2) Knot of Love — matrimonial platform with real-time chat, KYC, push notifications, and full deployment; (3) Image Steganography System — client-side LSB encoding for hiding data in images. He also built a Rainfall Prediction ML model in Python.`,
-  },
-  // ── NODEMAILER / EMAIL ──
-  {
-    keywords: ['email', 'nodemailer', 'smtp', 'notification', 'mail', 'send'],
-    reply: `Pritish has implemented email features using Nodemailer with Gmail SMTP. He uses it for event registration confirmations, contact form submissions, password reset emails, and other transactional notifications in his MERN applications.`,
-  },
-  // ── CONTACT ──
-  {
-    keywords: ['contact', 'reach', 'connect', 'email address', 'linkedin', 'github', 'social'],
-    reply: `You can reach Pritish at: Email — pritishpanda157@gmail.com | LinkedIn — linkedin.com/in/pritish-kumar-panda-dev/ | GitHub — github.com/pritish157. He typically responds within 24 hours.`,
+    id: 'contact',
+    title: 'Contact and availability',
+    category: 'Contact',
+    anchor: '/#contact',
+    keywords: ['contact', 'email', 'linkedin', 'github', 'availability', 'hire', 'reach', 'connect'],
+    summary:
+      'Pritish is open to remote engineering opportunities and can be reached directly by email, LinkedIn, or GitHub.',
+    details: [
+      'Email: pritishpanda157@gmail.com',
+      'LinkedIn: linkedin.com/in/pritish-kumar-panda-dev/ | GitHub: github.com/pritish157',
+    ],
   },
 ]
 
-/**
- * Find best matching response for a query
- * @param {string} query
- * @returns {string}
- */
-function queryKnowledge(query) {
-  const lower = query.toLowerCase()
-  const words = lower.split(/\s+/)
+function normalize(text) {
+  return String(text || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 
-  let bestMatch = null
-  let bestScore = 0
+function tokenize(text) {
+  return [...new Set(normalize(text).split(' ').filter((token) => token.length > 2))]
+}
 
-  for (const entry of knowledge) {
-    let score = 0
-    for (const keyword of entry.keywords) {
-      if (lower.includes(keyword)) score += 2
-      else if (words.some(w => keyword.includes(w) && w.length > 3)) score += 1
-    }
-    if (score > bestScore) {
-      bestScore = score
-      bestMatch = entry
+const preparedDocuments = portfolioDocuments.map((document) => {
+  const searchText = normalize(
+    [document.title, document.category, document.summary, ...document.details, ...document.keywords].join(' '),
+  )
+
+  return {
+    ...document,
+    searchText,
+    keywordSet: new Set(document.keywords.flatMap((keyword) => tokenize(keyword))),
+  }
+})
+
+function scoreDocument(document, normalizedQuery, tokens) {
+  let score = 0
+
+  for (const keyword of document.keywords) {
+    const normalizedKeyword = normalize(keyword)
+
+    if (!normalizedKeyword) continue
+    if (normalizedQuery.includes(normalizedKeyword)) {
+      score += normalizedKeyword.includes(' ') ? 12 : 7
     }
   }
 
-  if (bestScore > 0 && bestMatch) return bestMatch.reply
+  for (const token of tokens) {
+    if (document.keywordSet.has(token)) {
+      score += 4
+      continue
+    }
 
-  return `Great question! I'm Pritish's portfolio assistant. I can tell you about his projects (Event Management App, Knot of Love matrimonial platform, Image Steganography), his tech stack (MERN, Socket.IO, JWT, Firebase), his skills, or his career goals. What would you like to know?`
+    if (document.searchText.includes(token)) {
+      score += 1
+    }
+  }
+
+  if (normalizedQuery && document.searchText.includes(normalizedQuery)) {
+    score += 8
+  }
+
+  return score
 }
 
-module.exports = { queryKnowledge }
+function pickSnippet(document, tokens) {
+  const scoredDetails = document.details
+    .map((detail) => ({
+      detail,
+      score: tokens.reduce((total, token) => total + (normalize(detail).includes(token) ? 1 : 0), 0),
+    }))
+    .sort((left, right) => right.score - left.score)
+
+  return scoredDetails[0]?.score ? scoredDetails[0].detail : document.summary
+}
+
+function retrieveKnowledge(query, limit = 3) {
+  const normalizedQuery = normalize(query)
+  const tokens = tokenize(query)
+
+  const matches = preparedDocuments
+    .map((document) => ({
+      ...document,
+      score: scoreDocument(document, normalizedQuery, tokens),
+      snippet: pickSnippet(document, tokens),
+    }))
+    .filter((document) => document.score > 0)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, limit)
+
+  if (matches.length) {
+    return matches.map(({ keywordSet, searchText, ...document }) => document)
+  }
+
+  return preparedDocuments
+    .slice(0, 2)
+    .map(({ keywordSet, searchText, ...document }) => ({ ...document, score: 0, snippet: document.summary }))
+}
+
+function buildKnowledgeContext(matches) {
+  return matches
+    .map(
+      (match) =>
+        `[${match.title} | ${match.category}]
+Summary: ${match.summary}
+Key details: ${match.details.join(' ')}`,
+    )
+    .join('\n\n')
+}
+
+function formatCitations(matches) {
+  return matches.map((match) => ({
+    id: match.id,
+    title: match.title,
+    category: match.category,
+    label: match.title,
+    href: match.anchor,
+  }))
+}
+
+function queryKnowledge(query, preloadedMatches) {
+  const matches = preloadedMatches?.length ? preloadedMatches : retrieveKnowledge(query)
+  const primary = matches[0]
+  const secondary = matches[1]
+
+  if (!primary) {
+    return {
+      reply:
+        'Ask about projects, authentication, real-time systems, deployment, AI work, or how Pritish fits a product engineering role.',
+      citations: [],
+    }
+  }
+
+  const segments = [primary.summary]
+
+  if (primary.snippet && primary.snippet !== primary.summary) {
+    segments.push(primary.snippet)
+  }
+
+  if (secondary && secondary.score >= Math.max(4, primary.score * 0.45)) {
+    segments.push(`Related proof: ${secondary.title} - ${secondary.snippet}`)
+  }
+
+  return {
+    reply: segments.join(' '),
+    citations: formatCitations(matches),
+  }
+}
+
+module.exports = {
+  buildKnowledgeContext,
+  formatCitations,
+  queryKnowledge,
+  retrieveKnowledge,
+}

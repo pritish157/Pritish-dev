@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { NavLink } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, Download, Menu, X } from 'lucide-react'
 import { primaryNav, siteConfig } from '../content/siteContent'
 
@@ -11,38 +11,48 @@ function navLinkClass({ isActive }) {
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const [isHidden, setIsHidden] = useState(false)
-  const { pathname } = useLocation()
-  const { scrollY, scrollYProgress } = useScroll()
-
-  useMotionValueEvent(scrollY, 'change', (current) => {
-    const previous = scrollY.getPrevious() ?? 0
-    const scrollingDown = current > previous
-
-    setIsScrolled(current > 10)
-    setIsHidden(!isOpen && current > 120 && scrollingDown)
-  })
 
   useEffect(() => {
-    setIsOpen(false)
-    setIsHidden(false)
-  }, [pathname])
+    let frame = 0
+
+    const updateScrollState = () => {
+      frame = 0
+      setIsScrolled(window.scrollY > 12)
+    }
+
+    const handleScroll = () => {
+      if (frame) {
+        return
+      }
+
+      frame = window.requestAnimationFrame(updateScrollState)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      if (frame) {
+        window.cancelAnimationFrame(frame)
+      }
+
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
+    if (!isOpen) {
+      return undefined
+    }
+
+    const previousOverflow = document.body.style.overflow
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setIsOpen(false)
       }
     }
 
-    const previousOverflow = document.body.style.overflow
-
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = previousOverflow || ''
-    }
-
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
@@ -52,18 +62,9 @@ export default function Navbar() {
   }, [isOpen])
 
   return (
-    <motion.header
-      className="nav-shell"
-      animate={{ y: isHidden ? -110 : 0 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <header className="nav-shell">
       <div className="nav-shell__inner">
-        <motion.div
-          className={`nav-bar ${isScrolled ? 'nav-bar--scrolled' : ''} ${isOpen ? 'nav-bar--open' : ''}`}
-          initial={{ y: -28, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        >
+        <div className={`nav-bar ${isScrolled ? 'nav-bar--scrolled' : ''} ${isOpen ? 'nav-bar--open' : ''}`}>
           <NavLink to="/" className="nav-brand" aria-label={`${siteConfig.name} home page`}>
             <span className="nav-brand__mark" aria-hidden="true">
               P
@@ -89,7 +90,7 @@ export default function Navbar() {
               Resume
             </a>
             <NavLink to="/contact" className="primary-button nav-cta__hire">
-              Hire Me
+              Contact
               <ArrowRight size={16} />
             </NavLink>
           </div>
@@ -104,9 +105,7 @@ export default function Navbar() {
           >
             {isOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
-
-          <motion.div className="nav-progress" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
-        </motion.div>
+        </div>
 
         <AnimatePresence>
           {isOpen ? (
@@ -124,10 +123,10 @@ export default function Navbar() {
               <motion.div
                 id="mobile-navigation"
                 className="nav-drawer"
-                initial={{ opacity: 0, y: -18, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -14, scale: 0.98 }}
-                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
               >
                 <nav className="nav-drawer__links" aria-label="Mobile navigation">
                   {primaryNav.map((item) => (
@@ -135,6 +134,7 @@ export default function Navbar() {
                       key={item.to}
                       to={item.to}
                       end={item.to === '/'}
+                      onClick={() => setIsOpen(false)}
                       className={({ isActive }) =>
                         `nav-drawer__link${isActive ? ' nav-drawer__link--active' : ''}`
                       }
@@ -149,7 +149,7 @@ export default function Navbar() {
                     <Download size={16} />
                     Download Resume
                   </a>
-                  <NavLink to="/contact" className="primary-button justify-center">
+                  <NavLink to="/contact" className="primary-button justify-center" onClick={() => setIsOpen(false)}>
                     Start a Conversation
                     <ArrowRight size={16} />
                   </NavLink>
@@ -159,6 +159,6 @@ export default function Navbar() {
           ) : null}
         </AnimatePresence>
       </div>
-    </motion.header>
+    </header>
   )
 }

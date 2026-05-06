@@ -1,180 +1,296 @@
-import { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import axios from 'axios'
+import { Bot, Link2, MessagesSquare, Send, Sparkles, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-const SUGGESTED = [
-  "What is the Matrimonial App?",
-  "What tech does Pritish use?",
-  "Can Pritish build real-time apps?",
-  "Tell me about the Event Management system",
-  "What is Pritish's career goal?",
-  "Does Pritish know authentication?",
+const SUGGESTED_PROMPTS = [
+  'Why should a technical recruiter hire Pritish?',
+  'Summarize his production MERN systems.',
+  'What backend architecture does he use?',
+  'How does he handle real-time features?',
 ]
 
-// Sanitize user input before sending
-const sanitize = (str) => str.replace(/[<>"'&]/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','&':'&amp;'}[c]))
+const INITIAL_MESSAGE = {
+  id: 'assistant-welcome',
+  role: 'assistant',
+  text: 'This chatbot is trained on Pritish Kumar Panda’s portfolio, projects, and career context — ask anything recruiter-facing.',
+  source: 'rag',
+  citations: [
+    { id: 'projects', label: 'Projects', href: '/#projects' },
+    { id: 'skills', label: 'Skills', href: '/#skills' },
+    { id: 'contact', label: 'Contact', href: '/#contact' },
+  ],
+}
+
+const sourceLabels = {
+  rag: 'Portfolio RAG',
+  'rag-fallback': 'Local RAG',
+  'openai-rag': 'AI + RAG',
+}
+
+const createMessageId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 
 function TypingDots() {
   return (
-    <div className="flex items-center gap-1 px-4 py-3">
-      {[0, 1, 2].map(i => (
-        <motion.div
-          key={i}
-          className="w-2 h-2 rounded-full bg-accent-purple"
-          animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1, 0.8] }}
-          transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
+    <div className="ai-typing" aria-label="Assistant is typing">
+      {[0, 1, 2].map((index) => (
+        <motion.span
+          key={index}
+          className="ai-typing__dot"
+          animate={{ opacity: [0.35, 1, 0.35], y: [0, -2, 0] }}
+          transition={{ duration: 0.9, repeat: Infinity, delay: index * 0.12 }}
         />
       ))}
     </div>
   )
 }
 
-/**
- * AIAssistant — works in two modes:
- *   embedded={true}  → stripped-down chat panel (used inside HomeScreen modal)
- *   embedded={false} → standalone full section (legacy, not used in current routing)
- */
+function MessageBubble({ message, onSourceClick }) {
+  return (
+    <div className={`ai-message ai-message--${message.role}`}>
+      <div className="ai-message__bubble">
+        <div className="ai-message__meta">
+          <span className="ai-message__role">{message.role === 'assistant' ? 'Assistant' : 'You'}</span>
+          {message.role === 'assistant' && message.source ? (
+            <span className="ai-message__source">{sourceLabels[message.source] || 'Portfolio RAG'}</span>
+          ) : null}
+        </div>
+
+        <p className="ai-message__text">{message.text}</p>
+
+        {message.role === 'assistant' && message.citations?.length ? (
+          <div className="ai-message__sources">
+            {message.citations.slice(0, 3).map((citation) => (
+              <Link key={citation.id} to={citation.href} className="ai-source-chip" onClick={onSourceClick}>
+                <Link2 size={12} />
+                {citation.label}
+              </Link>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
 export default function AIAssistant({ embedded = false }) {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      text: "Hey! I'm Pritish's AI assistant. Ask me anything about his projects, skills, or experience. Try one of the suggestions below ↓",
-    },
-  ])
+  const [isOpen, setIsOpen] = useState(embedded)
+  const [messages, setMessages] = useState([INITIAL_MESSAGE])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+  const inputRef = useRef(null)
+
+  const lastAssistantMessage = useMemo(
+    () => [...messages].reverse().find((message) => message.role === 'assistant') ?? INITIAL_MESSAGE,
+    [messages],
+  )
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
+    if (!isOpen && !embedded) return undefined
+
+    const frame = window.requestAnimationFrame(() => {
+      bottomRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [embedded, isOpen, loading, messages])
+
+  useEffect(() => {
+    if (!isOpen && !embedded) return undefined
+
+    const timeout = window.setTimeout(() => {
+      inputRef.current?.focus()
+    }, 120)
+
+    return () => window.clearTimeout(timeout)
+  }, [embedded, isOpen])
+
+  useEffect(() => {
+    if (embedded || !isOpen) return undefined
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [embedded, isOpen])
 
   const sendMessage = async (text) => {
-    const msg = (text || input.trim()).slice(0, 500)
-    if (!msg || loading) return
+    const nextMessage = (text || input).trim().slice(0, 500)
+    if (!nextMessage || loading) return
+
+    const history = messages.map((message) => ({ role: message.role, content: message.text }))
+
     setInput('')
-    setMessages(prev => [...prev, { role: 'user', text: msg }])
     setLoading(true)
+    setMessages((current) => [...current, { id: createMessageId(), role: 'user', text: nextMessage }])
 
     try {
-      const { data } = await axios.post('/api/ai/chat', { message: sanitize(msg) })
-      setMessages(prev => [...prev, { role: 'assistant', text: data.reply }])
+      const { data } = await axios.post('/api/ai/chat', {
+        message: nextMessage,
+        history,
+      })
+
+      const payload = data?.data ?? data
+      const reply = payload?.reply?.trim() || 'I’m ready to explain Pritish’s projects, tech, and delivery approach.'
+
+      setMessages((current) => [
+        ...current,
+        {
+          id: createMessageId(),
+          role: 'assistant',
+          text: reply,
+          source: payload?.source || 'rag',
+          citations: Array.isArray(payload?.citations) ? payload?.citations : [],
+        },
+      ])
     } catch {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        text: "Sorry, the AI service isn't connected right now. But feel free to explore the rest of the portfolio!",
-      }])
+      setMessages((current) => [
+        ...current,
+        {
+          id: createMessageId(),
+          role: 'assistant',
+          text:
+            'The assistant is temporarily unavailable. You can still ask key recruiter questions about Pritish’s stack, projects, and availability.',
+          source: 'rag',
+          citations: INITIAL_MESSAGE.citations,
+        },
+      ])
     } finally {
       setLoading(false)
     }
   }
 
-  const chatPanel = (
-    <div className="flex flex-col flex-1 min-h-0">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 -webkit-overflow-scrolling-touch"
-        style={{ maxHeight: embedded ? '260px' : '320px' }}>
-        {messages.map((msg, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25 }}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className={`max-w-[82%] px-3.5 py-2.5 text-sm leading-relaxed ${
-              msg.role === 'user'
-                ? 'rounded-2xl rounded-br-sm bg-gradient-to-br from-accent-purple to-accent-blue text-white'
-                : 'rounded-2xl rounded-bl-sm bg-white/5 border border-accent-purple/15 text-slate-300'
-            }`}>
-              {msg.text}
-            </div>
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    sendMessage()
+  }
+
+  const panel = (
+    <motion.div
+      key="portfolio-ai-panel"
+      id="portfolio-ai-panel"
+      initial={embedded ? false : { opacity: 0, y: 18, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 22, scale: 0.96 }}
+      transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+      className={`ai-assistant-card surface-panel${embedded ? ' ai-assistant-card--embedded' : ''}`}
+      role={embedded ? 'region' : 'dialog'}
+      aria-label="Portfolio AI assistant"
+      aria-modal={embedded ? undefined : false}
+    >
+      <div className="ai-assistant-card__header">
+        <div className="ai-assistant-card__brand">
+          <span className="ai-assistant-card__mark" aria-hidden="true">
+            <Bot size={18} />
+          </span>
+          <div>
+            <p className="ai-assistant-card__eyebrow">Recruiter assistant</p>
+            <h2 className="ai-assistant-card__title">Ask about Pritish Kumar Panda</h2>
+            <p className="ai-assistant-card__subtitle">
+              Get concise recruiter-ready answers on MERN systems, real-time features, auth, and hiring fit.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="icon-button ai-assistant-card__close"
+          onClick={() => setIsOpen(false)}
+          aria-label="Close assistant"
+        >
+          <X size={16} />
+        </button>
+      </div>
+
+      <div className="ai-assistant-card__suggestions" aria-label="Suggested questions">
+        {SUGGESTED_PROMPTS.map((prompt) => (
+          <button key={prompt} type="button" className="ai-suggestion-chip" onClick={() => sendMessage(prompt)}>
+            <Sparkles size={12} />
+            {prompt}
+          </button>
+        ))}
+      </div>
+
+      <div className="ai-assistant-card__messages" aria-live="polite" aria-atomic="false">
+        {messages.map((message) => (
+          <motion.div key={message.id} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.18 }}>
+            <MessageBubble
+              message={message}
+              onSourceClick={() => {
+                if (!embedded) {
+                  setIsOpen(false)
+                }
+              }}
+            />
           </motion.div>
         ))}
 
-        {loading && (
-          <div className="flex justify-start">
-            <div className="rounded-2xl rounded-bl-sm bg-white/5 border border-accent-purple/15">
+        {loading ? (
+          <div className="ai-message ai-message--assistant">
+            <div className="ai-message__bubble">
               <TypingDots />
             </div>
           </div>
-        )}
+        ) : null}
+
         <div ref={bottomRef} />
       </div>
 
-      {/* Suggestions */}
-      <div className="px-4 py-2 border-t border-accent-purple/10 overflow-x-auto shrink-0"
-        style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className="flex gap-1.5">
-          {SUGGESTED.map(s => (
-            <button
-              key={s}
-              onClick={() => sendMessage(s)}
-              className="shrink-0 text-[11px] py-1 px-2.5 rounded-full whitespace-nowrap bg-accent-purple/8 border border-accent-purple/20 text-slate-400 cursor-pointer transition-colors hover:border-accent-purple/50 hover:text-purple-300"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Input */}
-      <div className="flex items-center gap-3 px-4 py-3 border-t border-accent-purple/10 shrink-0">
+      <form className="ai-assistant-card__composer" onSubmit={handleSubmit}>
+        <label htmlFor="portfolio-ai-input" className="sr-only">
+          Ask the portfolio AI assistant about Pritish
+        </label>
         <input
+          id="portfolio-ai-input"
+          ref={inputRef}
           type="text"
           value={input}
-          onChange={e => setInput(e.target.value.slice(0, 500))}
-          onKeyDown={e => e.key === 'Enter' && sendMessage()}
-          placeholder="Ask about projects, skills, or experience..."
-          className="flex-1 bg-transparent border-none outline-none text-sm text-text-primary placeholder:text-text-dim"
+          onChange={(event) => setInput(event.target.value.slice(0, 500))}
+          placeholder="Ask about Pritish’s stack, projects, or availability"
+          className="ai-assistant-card__input"
           maxLength={500}
-          aria-label="Ask the AI assistant"
+          disabled={loading}
+          aria-disabled={loading}
         />
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => sendMessage()}
-          disabled={!input.trim() || loading}
-          className="w-9 h-9 rounded-xl border-none bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center cursor-pointer shrink-0 transition-opacity disabled:opacity-40"
-          aria-label="Send message"
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-            <line x1="22" y1="2" x2="11" y2="13" />
-            <polygon points="22 2 15 22 11 13 2 9 22 2" />
-          </svg>
-        </motion.button>
-      </div>
-    </div>
+        <button type="submit" className="primary-button ai-assistant-card__send" disabled={!input.trim() || loading}>
+          <Send size={15} />
+          Send
+        </button>
+      </form>
+    </motion.div>
   )
 
   if (embedded) {
-    return chatPanel
+    return panel
   }
 
-  // Standalone full-section mode (kept for backward compatibility)
   return (
-    <div className="py-12 px-4 sm:px-6 max-w-[var(--content-max)] mx-auto">
-      <div className="screen-header">
-        <div className="tag tag-purple mb-3">ai.assistant</div>
-        <h2 className="screen-title">Ask the <span className="gradient-text">AI Assistant</span></h2>
-        <p className="screen-subtitle">A RAG-powered bot trained on Pritish's projects, skills, and experience.</p>
-      </div>
+    <div className="ai-assistant-shell">
+      <AnimatePresence>{isOpen ? panel : null}</AnimatePresence>
 
-      <div className="max-w-[680px] mx-auto">
-        <div className="glass border border-accent-purple/25 rounded-3xl overflow-hidden">
-          {/* Header bar */}
-          <div className="flex items-center gap-2.5 px-5 py-3 bg-accent-purple/8 border-b border-accent-purple/15">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-purple to-accent-cyan flex items-center justify-center text-white font-bold text-sm">AI</div>
-            <div>
-              <div className="text-sm font-semibold text-text-primary">Portfolio Assistant</div>
-              <div className="flex items-center gap-1 text-xs text-text-muted">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block animate-pulse-dot" />
-                RAG-powered · Knowledge base: Pritish's projects
-              </div>
-            </div>
-          </div>
-          {chatPanel}
-        </div>
-      </div>
+      <motion.button
+        type="button"
+        className="ai-launcher"
+        onClick={() => setIsOpen((current) => !current)}
+        whileHover={{ y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        aria-expanded={isOpen}
+        aria-controls="portfolio-ai-panel"
+      >
+        <span className="ai-launcher__icon" aria-hidden="true">
+          <MessagesSquare size={18} />
+        </span>
+        <span className="ai-launcher__text">
+          <strong>Ask portfolio AI</strong>
+          <span>Recruiter-ready answers</span>
+        </span>
+      </motion.button>
     </div>
   )
 }

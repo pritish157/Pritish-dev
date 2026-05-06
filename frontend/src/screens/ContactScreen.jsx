@@ -11,8 +11,8 @@ export default function ContactScreen() {
       <Seo pageKey="contact" />
       <PageLayout
         eyebrow="Contact"
-        title="Let’s talk about the role, team, or product challenge."
-        description="If you are hiring for a MERN Stack Developer, Full Stack Developer, or product engineering role, this page is built to help you reach me quickly with context."
+        title="Let's talk about the role, team, or system you are building."
+        description="If you are hiring for a MERN developer, React developer, Node.js developer, or full-stack engineering role, this page is designed to get you to the right context quickly."
       >
         <div className="space-y-6">
           <Reveal className="surface-panel">

@@ -1,22 +1,38 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Navbar from './components/Navbar'
 
+const AIAssistant = lazy(() => import('./components/AIAssistant'))
 const HomeScreen = lazy(() => import('./screens/HomeScreen'))
 const ProjectsScreen = lazy(() => import('./screens/ProjectsScreen'))
 const SkillsScreen = lazy(() => import('./screens/SkillsScreen'))
 const AboutScreen = lazy(() => import('./screens/AboutScreen'))
 const ContactScreen = lazy(() => import('./screens/ContactScreen'))
 
-function ScrollToTop() {
-  const { pathname } = useLocation()
+function ScrollManager() {
+  const { pathname, hash } = useLocation()
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [pathname])
+    const frame = window.requestAnimationFrame(() => {
+      if (hash) {
+        const target = document.getElementById(hash.slice(1))
+
+        if (target) {
+          const offset = 96
+          const top = target.getBoundingClientRect().top + window.scrollY - offset
+
+          window.scrollTo({ top, left: 0, behavior: 'smooth' })
+          return
+        }
+      }
+
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [pathname, hash])
 
   return null
 }
@@ -35,8 +51,6 @@ function ScreenFallback() {
 }
 
 export default function App() {
-  const location = useLocation()
-
   return (
     <>
       <a href="#main-content" className="skip-link">
@@ -63,23 +77,24 @@ export default function App() {
         }}
       />
 
-      <ScrollToTop />
+      <ScrollManager />
       <Navbar />
 
       <main id="main-content" className="site-main" role="main">
-        <AnimatePresence mode="wait">
-          <Suspense fallback={<ScreenFallback />}>
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<HomeScreen />} />
-              <Route path="/projects" element={<ProjectsScreen />} />
-              <Route path="/skills" element={<SkillsScreen />} />
-              <Route path="/about" element={<AboutScreen />} />
-              <Route path="/contact" element={<ContactScreen />} />
-            </Routes>
-          </Suspense>
-        </AnimatePresence>
+        <Suspense fallback={<ScreenFallback />}>
+          <Routes>
+            <Route path="/" element={<HomeScreen />} />
+            <Route path="/projects" element={<ProjectsScreen />} />
+            <Route path="/skills" element={<SkillsScreen />} />
+            <Route path="/about" element={<AboutScreen />} />
+            <Route path="/contact" element={<ContactScreen />} />
+          </Routes>
+        </Suspense>
       </main>
 
+      <Suspense fallback={null}>
+        <AIAssistant />
+      </Suspense>
       <Footer />
     </>
   )

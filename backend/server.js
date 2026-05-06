@@ -37,6 +37,7 @@ let requestCount = 0
 app.use((req, res, next) => { requestCount++; next() })
 
 // ── Middleware Stack ──
+app.use(express.json({ limit: '10kb' }))
 app.use(requestId)
 app.use(requestLogger)
 getSecurityMiddleware().forEach(mw => app.use(mw))
