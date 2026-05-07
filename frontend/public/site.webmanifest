@@ -3,9 +3,9 @@
   "short_name": "Pritish.dev",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
-  "description": "Portfolio of Pritish Kumar Panda, MERN Stack Developer and Full Stack Developer in India.",
+  "background_color": "#050816",
+  "theme_color": "#050816",
+  "description": "Premium portfolio of Pritish Kumar Panda, frontend engineer with full-stack depth building AI-era product systems.",
   "icons": [
     {
       "src": "/favicon.svg",
