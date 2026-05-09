@@ -62,11 +62,11 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div variants={item} className="mt-8 space-y-6">
-            <p className="text-sm uppercase tracking-[0.32em] text-violet-200/80">Frontend engineering - AI-era product systems</p>
+            <p className="text-sm uppercase tracking-[0.32em] text-violet-200/80">Backend engineering - AI-era product systems</p>
             <h1 className="font-display text-[clamp(3.25rem,7vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.08em] text-white">
               Building AI-era
               <span className="block bg-gradient-to-r from-white via-violet-200 to-fuchsia-200 bg-clip-text text-transparent">
-                frontends with
+                backends with
               </span>
               <span className="block text-white/82">full-stack gravity.</span>
             </h1>

@@ -2,7 +2,7 @@
 
 Live site: [https://pritish-dev.vercel.app/](https://pritish-dev.vercel.app/)
 
-Modern portfolio for Pritish Kumar Panda showcasing product-focused frontend engineering, full-stack development, AI-enhanced chat, and secure contact workflows.
+Modern portfolio for Pritish Kumar Panda showcasing product-focused engineering, full-stack development, AI-enhanced chat, and secure contact workflows.
 
 ## Overview
 
