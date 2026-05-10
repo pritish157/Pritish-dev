@@ -241,8 +241,8 @@ export default function FeaturedProjects() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <Button type="button" variant="secondary" onClick={prevProject} disabled={page === 0}>
+            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:gap-3">
+              <Button type="button" variant="secondary" onClick={prevProject} disabled={page === 0} className="w-full">
                 <RiArrowLeftSLine className="h-5 w-5" />
                 Prev
               </Button>
@@ -251,6 +251,7 @@ export default function FeaturedProjects() {
                 variant="secondary"
                 onClick={nextProject}
                 disabled={page === totalPages - 1}
+                className="w-full"
               >
                 Next
                 <RiArrowRightSLine className="h-5 w-5" />
