@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform, type Variants } from "framer-motion";
 import { RiArrowDownLine, RiArrowRightUpLine, RiGithubFill, RiSparklingLine } from "react-icons/ri";
 
@@ -29,6 +30,101 @@ const item: Variants = {
     }
   }
 };
+
+function SystemTerminal() {
+  const [displayText, setDisplayText] = useState("");
+
+  useEffect(() => {
+    const lines = [
+      "> INITIALIZING MERN STACK...",
+      "> LOADING PYTHON ALGORITHMS...",
+      "> SECURING INFRASTRUCTURE...",
+      "> SYSTEM.READY // OPEN FOR IMPACT."
+    ];
+    let currentLine = 0;
+    let currentChar = 0;
+    let isDeleting = false;
+    let timer: NodeJS.Timeout;
+
+    const type = () => {
+      const fullString = lines[currentLine];
+      
+      if (!isDeleting) {
+        setDisplayText(fullString.substring(0, currentChar + 1));
+        currentChar++;
+        
+        if (currentChar === fullString.length) {
+          if (currentLine === lines.length - 1) {
+            return; // Stop at the last line
+          }
+          isDeleting = true;
+          timer = setTimeout(type, 1500);
+        } else {
+          timer = setTimeout(type, 40);
+        }
+      } else {
+        setDisplayText(fullString.substring(0, currentChar - 1));
+        currentChar--;
+        
+        if (currentChar === 0) {
+          isDeleting = false;
+          currentLine = (currentLine + 1) % lines.length;
+          timer = setTimeout(type, 300);
+        } else {
+          timer = setTimeout(type, 15);
+        }
+      }
+    };
+
+    timer = setTimeout(type, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0A]/90 shadow-luxe font-mono backdrop-blur-2xl">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.02] px-5 py-4">
+        <div className="flex gap-2">
+          <div className="h-3 w-3 rounded-full bg-rose-500/80" />
+          <div className="h-3 w-3 rounded-full bg-amber-500/80" />
+          <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
+        </div>
+        <span className="ml-3 text-[0.7rem] uppercase tracking-widest text-slate-500">sys-status // root</span>
+      </div>
+      
+      <div className="p-5 sm:p-8 space-y-6">
+        <div className="flex items-start sm:items-center gap-2 text-xs sm:text-sm md:text-base text-emerald-400 min-h-[2.5rem] sm:min-h-[1.5rem]">
+          <span className="leading-relaxed">{displayText}</span>
+          <motion.span 
+            animate={{ opacity: [1, 0] }} 
+            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+            className="mt-1 sm:mt-0 inline-block h-4 w-2 sm:h-5 bg-emerald-400 shrink-0"
+          />
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+           <div className="rounded-[1.2rem] border border-white/5 bg-white/[0.02] p-4">
+             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Core Engine</p>
+             <p className="mt-2 text-sm text-slate-200">Node.js / Python</p>
+           </div>
+           <div className="rounded-[1.2rem] border border-white/5 bg-white/[0.02] p-4">
+             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Focus</p>
+             <p className="mt-2 text-sm text-slate-200">High-Performance Arch</p>
+           </div>
+        </div>
+        
+        <div className="rounded-[1.2rem] border border-violet-500/20 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 p-5 mt-4">
+           <div className="flex items-start gap-4">
+              <div className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.9)]" />
+              <div>
+                <p className="text-sm font-medium tracking-wide text-violet-100 uppercase">Available for Hire</p>
+                <p className="mt-1 text-[13px] leading-relaxed text-violet-200/70">Ready to engineer product workflows and secure backend systems for high-impact roles.</p>
+              </div>
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
@@ -132,94 +228,7 @@ export function HeroSection() {
 
         <motion.div style={{ y: panelY }} className="relative">
           <div className="absolute inset-x-[10%] bottom-0 h-28 rounded-full bg-violet-500/30 blur-[90px]" />
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.05] p-5 shadow-luxe backdrop-blur-2xl">
-            <div className="absolute inset-0 bg-[linear-gradient(130deg,rgba(255,255,255,0.16),transparent_22%,transparent_72%,rgba(168,85,247,0.16))]" />
-            <div className="relative space-y-5">
-              <div className="flex items-center justify-between rounded-[1.5rem] border border-white/10 bg-black/20 px-4 py-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Live positioning</p>
-                  <p className="mt-2 font-display text-xl tracking-[-0.05em] text-white">
-                    Premium interfaces.
-                    <span className="block text-violet-200">Production logic.</span>
-                  </p>
-                </div>
-                <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-2 text-xs uppercase tracking-[0.18em] text-emerald-200">
-                  Shipping now
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
-                <motion.div
-                  animate={ambientMotion && !reduceMotion ? { y: [0, -10, 0] } : undefined}
-                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                  className="rounded-[1.6rem] border border-violet-400/20 bg-gradient-to-br from-violet-500/16 via-transparent to-fuchsia-500/12 p-5"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Command surface</p>
-                      <p className="mt-3 max-w-xs font-display text-2xl tracking-[-0.05em] text-white">
-                        High-performance product surfaces built for trust and flow.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-2 text-xs text-slate-300">
-                      60fps target
-                    </div>
-                  </div>
-
-                  <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-[1.3rem] border border-white/10 bg-black/20 p-4">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Surface</p>
-                      <p className="mt-2 text-sm text-slate-200">Next.js + motion-led storytelling</p>
-                    </div>
-                    <div className="rounded-[1.3rem] border border-white/10 bg-black/20 p-4">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Logic</p>
-                      <p className="mt-2 text-sm text-slate-200">Auth, workflows, and API contracts</p>
-                    </div>
-                    <div className="rounded-[1.3rem] border border-white/10 bg-black/20 p-4">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Feel</p>
-                      <p className="mt-2 text-sm text-slate-200">Cinematic, minimal, deeply engineered</p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <div className="grid gap-4">
-                  <motion.div
-                    animate={ambientMotion && !reduceMotion ? { y: [0, 10, 0] } : undefined}
-                    transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Priority stack</p>
-                    <div className="mt-4 space-y-3">
-                      {["UX systems", "Realtime clarity", "Security posture"].map((row) => (
-                        <div key={row} className="flex items-center justify-between rounded-2xl bg-black/20 px-3 py-3">
-                          <span className="text-sm text-slate-300">{row}</span>
-                          <span className="h-2 w-2 rounded-full bg-violet-300 shadow-[0_0_14px_rgba(196,181,253,0.9)]" />
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  <motion.div
-                    animate={ambientMotion && !reduceMotion ? { y: [0, -8, 0] } : undefined}
-                    transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-                    className="rounded-[1.5rem] border border-white/10 bg-white/[0.05] p-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Current energy</p>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {["AI-ready UI", "Luxury SaaS feel", "Zero fluff", "Typed architecture"].map((pill) => (
-                        <span
-                          key={pill}
-                          className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs uppercase tracking-[0.16em] text-slate-300"
-                        >
-                          {pill}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SystemTerminal />
         </motion.div>
       </div>
 

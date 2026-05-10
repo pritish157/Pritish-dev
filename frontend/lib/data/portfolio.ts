@@ -105,9 +105,9 @@ export const quickAccessLinks: ExternalLink[] = [
   },
   {
     label: "Vireon",
-    href: "https://github.com/pritish157/vireon",
-    shortLabel: "GitHub repo",
-    description: "Event management app source and workflow architecture.",
+    href: "https://vireon-swart.vercel.app",
+    shortLabel: "Live project",
+    description: "Event management app with clean UI and workflows.",
     category: "project"
   }
 ];
@@ -174,7 +174,8 @@ export const featuredProjects: Project[] = [
       { label: "Delivery", value: "Render + Vercel" }
     ],
     links: {
-      live: "https://knot-of-love.vercel.app"
+      live: "https://knot-of-love.vercel.app",
+      github: "https://github.com/pritish157/Knot-of-Love"
     },
     challenge:
       "The core challenge was making a sensitive social product feel fast and modern without compromising verification, safety, or moderation boundaries.",
@@ -213,6 +214,7 @@ export const featuredProjects: Project[] = [
       { label: "Automation", value: "Transactional email" }
     ],
     links: {
+      live: "https://vireon-swart.vercel.app",
       github: "https://github.com/pritish157/vireon"
     },
     challenge:
@@ -235,79 +237,81 @@ export const featuredProjects: Project[] = [
     ]
   },
   {
-    id: "suspicious-login-detection",
-    title: "Suspicious Login Detection System",
-    eyebrow: "Security signal engine",
+    id: "django-fuel-route",
+    title: "Fuel Route Optimisation",
+    eyebrow: "Backend logistics engine",
     summary:
-      "A security-focused flow for flagging anomalous sign-ins using device, IP, location, and session-risk signals before trust is granted.",
+      "A Python/Django backend service designed to optimize fuel station stops along mapped routes to minimize travel and refueling costs.",
     impact:
-      "Brings machine-learning-adjacent detection thinking into product UX instead of leaving security as a backend afterthought.",
+      "Demonstrates backend logic complexity, handling geo-spatial routing data, cost analysis, and API design without relying on a GUI.",
     accent: "#7C3AED",
-    preview: "security",
-    stack: ["Python", "ML Heuristics", "Flask", "MongoDB", "Risk Scoring", "Email Alerts"],
+    preview: "ops",
+    stack: ["Python", "Django", "PostgreSQL", "Routing Algorithms", "REST API"],
     metrics: [
-      { label: "Signal sources", value: "IP + geo + device" },
-      { label: "Decision layer", value: "Risk scoring" },
-      { label: "Protective action", value: "Alert + challenge" },
-      { label: "Focus", value: "Account trust" }
+      { label: "System type", value: "Headless backend" },
+      { label: "Logic focus", value: "Cost algorithms" },
+      { label: "Framework", value: "Django REST" },
+      { label: "Data structure", value: "Geo-spatial" }
     ],
-    links: {},
+    links: {
+      github: "https://github.com/pritish157/Django-backend-fuel-route-optimisation-"
+    },
     challenge:
-      "Detection systems are only useful if the product can explain risk clearly and respond without burying users in false alarms or opaque states.",
+      "Calculating the most cost-efficient fuel stops requires balancing travel deviations with fuel price differentials across multiple nodes.",
     outcome: [
-      "Risk scoring centered on abnormal session context rather than a single hardcoded rule.",
-      "Product-friendly response states for alerts, step-up checks, and account protection.",
-      "A stronger portfolio signal around applied security and AI-era detection thinking."
+      "Engineered an API capable of ingesting route data and returning optimized waypoints.",
+      "Handled complex logic around range limits, fuel capacity, and dynamic pricing.",
+      "Solidified pure backend system design without relying on visual crutches."
     ],
     architecture: [
-      "Feature extraction from login context such as IP shifts, device changes, and geolocation jumps.",
-      "Risk evaluation layer that turns signals into a usable confidence score.",
-      "Alerting and response flow for suspicious sessions and protected account actions.",
-      "Dashboard-ready event model for future review and investigation surfaces."
+      "Django REST Framework exposing routing calculation endpoints.",
+      "Algorithmic layer evaluating route segments and station costs.",
+      "Data modeling for stations, prices, and vehicle profiles.",
+      "Headless system meant for M2M (machine-to-machine) interaction."
     ],
     highlights: [
-      "Adds a security and anomaly-detection angle to the portfolio.",
-      "Shows comfort with productizing technical signals into understandable UX.",
-      "Useful talking point for AI, security, and platform roles."
+      "Highlights strong Python and Django capability.",
+      "Proves ability to write complex, logic-heavy headless systems.",
+      "Great talking point for backend-centric or algorithm-focused engineering roles."
     ]
   },
   {
-    id: "event-management-platform",
-    title: "Event Management Platform",
-    eyebrow: "Workflow system behind Vireon",
+    id: "imagesteg",
+    title: "ImageSteg",
+    eyebrow: "Security & Cryptography",
     summary:
-      "The operational core that powers publishing, registrations, capacity rules, confirmations, and dashboard reporting for event teams.",
+      "A Python script and utility for hiding hidden data/text inside images using Least Significant Bit (LSB) steganography techniques.",
     impact:
-      "Demonstrates backend-first product architecture where rules, permissions, and automation drive the UX instead of patching it later.",
+      "Provides a raw, low-level demonstration of data manipulation, byte-level processing, and security-oriented problem solving.",
     accent: "#C084FC",
-    preview: "ops",
-    stack: ["Node.js", "Express", "MongoDB", "JWT", "RBAC", "Email Workflow"],
+    preview: "security",
+    stack: ["Python", "Cryptography", "Image Processing", "CLI", "Byte Manipulation"],
     metrics: [
-      { label: "API surface", value: "18 endpoints" },
-      { label: "Permissions", value: "RBAC" },
-      { label: "State logic", value: "Deadlines + capacity" },
-      { label: "Ops layer", value: "Organizer tooling" }
+      { label: "Technique", value: "LSB Steganography" },
+      { label: "Platform", value: "Python CLI" },
+      { label: "Focus", value: "Data hiding" },
+      { label: "Domain", value: "Security" }
     ],
     links: {
-      github: "https://github.com/pritish157/vireon"
+      github: "https://github.com/pritish157/imagesteg."
     },
     challenge:
-      "The system needed to model real event operations, not just store event data, while keeping organizer actions reliable and scalable.",
+      "Altering image pixels to encode data without causing visually detectable artifacts or corrupting the image file structure.",
     outcome: [
-      "Business rules such as seat limits and deadlines enforced at the API layer.",
-      "Organizer workflows shaped around actual state transitions rather than generic CRUD.",
-      "An operations story recruiters can map directly to internal tools and startup products."
+      "Implemented algorithms that parse and safely modify the Least Significant Bits of pixel arrays.",
+      "Ensured data could be both accurately embedded and retrieved losslessly.",
+      "Built a functional security utility completely from scratch."
     ],
     architecture: [
-      "Express controllers shaped around publishing, registration, and operational actions.",
-      "JWT-secured routes with role boundaries between attendee, organizer, and admin experiences.",
-      "MongoDB collections modeled for event state, registrations, and reporting slices.",
-      "Email confirmations triggered by trusted backend workflow changes."
+      "Python scripts parsing raw image byte data.",
+      "Encoding module converting text/payloads to binary streams.",
+      "Injection algorithm dispersing bits across RGB channels.",
+      "Extraction module reading bits to rebuild the hidden payload."
     ],
     highlights: [
-      "Strong proof of backend ownership and workflow modeling.",
-      "Explains how product reliability starts in system boundaries, not only UI decisions.",
-      "Pairs well with Vireon to show both product surface and platform core."
+      "Adds a strong security, cryptography, and low-level system capability to the portfolio.",
+      "Proves you can build pure CLI utilities and work with binary data.",
+      "Shows versatility outside of traditional web frameworks."
     ]
   }
 ];
