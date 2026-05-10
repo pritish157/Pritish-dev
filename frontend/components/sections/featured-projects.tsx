@@ -7,10 +7,8 @@ import {
   RiArrowRightSLine,
   RiArrowRightUpLine,
   RiCalendarScheduleLine,
-  RiFlowChart,
   RiGithubFill,
   RiRadarLine,
-  RiShieldCheckLine,
   RiSparklingLine,
   RiTerminalBoxLine,
   RiKeynoteLine
@@ -116,9 +114,9 @@ function PreviewSurface({ project }: { project: Project }) {
            </div>
            <div className="mt-4 rounded border border-indigo-500/30 bg-indigo-500/10 p-3 text-indigo-200">
              {"{"} <br/>
-             &nbsp;&nbsp;"optimal_stops": 3, <br/>
-             &nbsp;&nbsp;"total_savings": "$124.50", <br/>
-             &nbsp;&nbsp;"route_deviation": "+4.2mi" <br/>
+             &nbsp;&nbsp;&quot;optimal_stops&quot;: 3, <br/>
+             &nbsp;&nbsp;&quot;total_savings&quot;: &quot;$124.50&quot;, <br/>
+             &nbsp;&nbsp;&quot;route_deviation&quot;: &quot;+4.2mi&quot; <br/>
              {"}"}
            </div>
          </div>
