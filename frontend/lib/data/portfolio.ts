@@ -63,7 +63,7 @@ export const siteConfig = {
   siteUrl: "https://pritish-dev.vercel.app",
   github: "https://github.com/pritish157",
   linkedin: "https://www.linkedin.com/in/pritish-kumar-panda-dev/",
-  resumePath: "/resume.pdf",
+  resumePath: "/pritish-resume.pdf",
   availability: "Open to 2026 full-time, internship, and selective freelance opportunities"
 } as const;
 
