@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   RiArrowLeftSLine,
@@ -23,8 +23,128 @@ import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { featuredProjects, type Project } from "@/lib/data/portfolio";
 import { cn } from "@/lib/utils";
 
+function AgentPreviewSurface() {
+  const [step, setStep] = useState(0);
+  const [streamText, setStreamText] = useState("");
+
+  const fullText = "Namaste. At the moment of birth, the Sun was aligned in Pisces at 23°30', while the Ascendant was rising in Cancer...";
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStep((prev) => (prev + 1) % 5);
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (step === 4) {
+      let index = 0;
+      setStreamText("");
+      const timer = setInterval(() => {
+        if (index < fullText.length) {
+          setStreamText((prev) => prev + fullText.charAt(index));
+          index++;
+        } else {
+          clearInterval(timer);
+        }
+      }, 30);
+      return () => clearInterval(timer);
+    } else {
+      setStreamText("");
+    }
+  }, [step]);
+
+  return (
+    <div className="relative h-64 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#070913] p-4 sm:p-5 font-mono">
+      <div className="absolute right-4 sm:right-5 top-4 sm:top-5 rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-[0.68rem] uppercase tracking-[0.18em] text-blue-300 backdrop-blur-md">
+        LangGraph Stateful Run
+      </div>
+
+      <div className="mt-8 flex h-full flex-col justify-between pb-8">
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center gap-2 rounded-lg border border-white/5 bg-white/[0.02] px-2.5 py-1.5 text-[10px] text-slate-400">
+            <span className={cn(
+              "h-1.5 w-1.5 rounded-full",
+              step === 0 ? "bg-blue-400 animate-pulse" : "bg-slate-500"
+            )} />
+            <span>Query: &quot;Einstein birth chart&quot;</span>
+          </div>
+
+          <div className="text-[10px] text-slate-500 uppercase tracking-wider">
+            Step: {step === 4 ? "4" : step}/4
+          </div>
+        </div>
+
+        <div className="relative my-2 flex items-center justify-between px-2 sm:px-6">
+          <svg className="absolute inset-x-0 top-1/2 h-8 w-full -translate-y-1/2 pointer-events-none z-0" style={{ opacity: 0.2 }}>
+            <line x1="15%" y1="50%" x2="45%" y2="50%" stroke="white" strokeWidth="2" strokeDasharray="4 4" />
+            <line x1="55%" y1="50%" x2="85%" y2="50%" stroke="white" strokeWidth="2" strokeDasharray="4 4" />
+          </svg>
+
+          <div className={cn(
+            "relative z-10 flex flex-col items-center gap-1 rounded-xl border px-2.5 py-1.5 text-center transition-all duration-500",
+            step === 0
+              ? "border-blue-500/50 bg-blue-500/15 text-blue-200 shadow-[0_0_15px_rgba(59,130,246,0.35)]"
+              : "border-white/5 bg-white/[0.02] text-slate-500"
+          )}>
+            <span className="text-[9px] font-bold">🔮 ROUTER</span>
+            <span className="text-[8px] opacity-80">classify_intent</span>
+          </div>
+
+          <div className={cn(
+            "relative z-10 flex flex-col items-center gap-1 rounded-xl border px-2.5 py-1.5 text-center transition-all duration-500",
+            step === 1 || step === 3
+              ? "border-violet-500/50 bg-violet-500/15 text-violet-200 shadow-[0_0_15px_rgba(139,92,246,0.35)]"
+              : "border-white/5 bg-white/[0.02] text-slate-500"
+          )}>
+            <span className="text-[9px] font-bold">🧠 AGENT</span>
+            <span className="text-[8px] opacity-80">gemini_llm</span>
+          </div>
+
+          <div className={cn(
+            "relative z-10 flex flex-col items-center gap-1 rounded-xl border px-2.5 py-1.5 text-center transition-all duration-500",
+            step === 2
+              ? "border-amber-500/50 bg-amber-500/15 text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.35)]"
+              : "border-white/5 bg-white/[0.02] text-slate-500"
+          )}>
+            <span className="text-[9px] font-bold">🔧 TOOLS</span>
+            <span className="text-[8px] opacity-80">compute_chart</span>
+          </div>
+        </div>
+
+        <div className={cn(
+          "rounded-xl border p-3 min-h-[4.5rem] transition-all duration-500",
+          step === 4
+            ? "border-emerald-500/20 bg-emerald-500/5"
+            : "border-white/5 bg-white/[0.02]"
+        )}>
+          <div className="flex items-center justify-between text-[9px] mb-1.5 font-bold">
+            <span className={step === 4 ? "text-emerald-400" : "text-slate-500"}>⚡ SSE STREAMING</span>
+            {step === 4 && <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+          </div>
+          <p className={cn(
+            "text-[10px] leading-relaxed",
+            step === 4 ? "text-emerald-200/90" : "text-slate-600"
+          )}>
+            {step === 4 ? (
+              streamText || "Connecting stream..."
+            ) : (
+              <span>[Stream idle. Waiting for LLM agent completion...]</span>
+            )}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function PreviewSurface({ project }: { project: Project }) {
   const accentStyle = { boxShadow: `0 0 0 1px ${project.accent}22, inset 0 0 0 1px rgba(255,255,255,0.04)` };
+
+  if (project.preview === "agent") {
+    return <AgentPreviewSurface />;
+  }
 
   if (project.preview === "chat") {
     return (
@@ -289,7 +409,7 @@ export default function FeaturedProjects() {
                           <h3 className="mt-3 font-display text-3xl tracking-[-0.05em] text-white">{currentProject.title}</h3>
                         </div>
                         <div className="rounded-full border border-white/10 bg-white/[0.05] p-3.5">
-                          {currentProject.preview === "chat" ? (
+                          {currentProject.preview === "chat" || currentProject.preview === "agent" ? (
                             <RiSparklingLine className="h-6 w-6 text-violet-200" />
                           ) : currentProject.preview === "events" ? (
                             <RiCalendarScheduleLine className="h-6 w-6 text-fuchsia-200" />

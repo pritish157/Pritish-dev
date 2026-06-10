@@ -23,7 +23,7 @@ export type Project = {
   summary: string;
   impact: string;
   accent: string;
-  preview: "chat" | "events" | "security" | "ops";
+  preview: "chat" | "events" | "security" | "ops" | "agent";
   stack: string[];
   metrics: Metric[];
   links: {
@@ -97,6 +97,13 @@ export const quickAccessLinks: ExternalLink[] = [
     category: "profile"
   },
   {
+    label: "AstroAgent",
+    href: "https://astro-agent-wheat.vercel.app",
+    shortLabel: "Live project",
+    description: "Stateful AI astrologer with LangGraph and natal charts.",
+    category: "project"
+  },
+  {
     label: "Knot of Love",
     href: "https://knot-of-love.vercel.app",
     shortLabel: "Live project",
@@ -156,6 +163,46 @@ export const credibilityNotes = [
 ] as const;
 
 export const featuredProjects: Project[] = [
+  {
+    id: "astro-agent",
+    title: "Aradhana AstroAgent",
+    eyebrow: "Agentic AI Astrologer",
+    summary:
+      "A stateful, multi-turn AI astrology agent built with LangGraph.js, featuring astronomical planetary longitude calculations, real-time Server-Sent Events (SSE) token streaming, and dynamic SVG natal chart generation.",
+    impact:
+      "Demonstrates advanced state machine flow control, real-time streamed responses, and mathematical client-side visualization in a production-ready system.",
+    accent: "#3B82F6",
+    preview: "agent",
+    stack: ["LangGraph.js", "Gemini 3.1", "Node.js", "Express", "MongoDB", "React", "Tailwind CSS", "SSE"],
+    metrics: [
+      { label: "Agent Architecture", value: "3-Node Stateful Graph" },
+      { label: "Execution Safeguard", value: "4-Step Hard Loop Cap" },
+      { label: "Calculations Engine", value: "astronomy-engine" },
+      { label: "Testing Suite", value: "30-case Golden Set" }
+    ],
+    links: {
+      live: "https://astro-agent-wheat.vercel.app",
+      github: "https://github.com/pritish157/Aradhana-Astroagent"
+    },
+    challenge:
+      "Ensuring the agent resolves complex birth chart details, filters sensitive questions (medical/financial/legal), and streams output in real time without entering infinite tool loops.",
+    outcome: [
+      "Built a stateful agent graph in LangGraph.js with routing logic based on rule-based fast paths and LLM intent classification.",
+      "Calculated exact celestial coordinate longitudes using astronomy-engine and computed Equal House Ascendant coordinates using spherical trigonometry.",
+      "Implemented a comprehensive evaluation runner with automatic tone scoring, geocoding validation, and Git hash tracking for regression testing."
+    ],
+    architecture: [
+      "Node.js + Express backend orchestrating API streams and database connections.",
+      "LangGraph.js state manager implementing the Router-Agent-Tools control loop.",
+      "MongoDB Atlas for session persistence, user profiles, and 30-day TTL geocoding cache.",
+      "Vite + React frontend displaying real-time streaming tokens and dynamic circular SVG charts."
+    ],
+    highlights: [
+      "Rigorous LLM-as-judge and deterministic testing harness.",
+      "Token-by-token streaming with Server-Sent Events (SSE).",
+      "Pure mathematical calculations with high precision."
+    ]
+  },
   {
     id: "knot-of-love",
     title: "Knot of Love",

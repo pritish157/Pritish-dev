@@ -201,7 +201,7 @@ export function HeroSection() {
                 </p>
               </div>
               <span className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs uppercase tracking-[0.16em] text-slate-300">
-                5 direct links
+                6 direct links
               </span>
             </div>
 
