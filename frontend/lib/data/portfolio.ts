@@ -52,7 +52,7 @@ export type SkillGroup = {
 export const siteConfig = {
   name: "Pritish Kumar Panda",
   shortName: "Pritish.dev",
-  role: "Frontend Engineer With Full-Stack Depth",
+  role: "Backend Engineer With Full-Stack Depth",
   headline: "Building AI-era frontends with production-grade systems underneath.",
   subheadline:
     "I craft cinematic product interfaces, secure backend workflows, and performance-first web experiences that feel engineered from the first scroll.",
