@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Space_Grotesk } from "next/font/google";
 
+import { BackToTop } from "@/components/layout/back-to-top";
 import { MobileDock } from "@/components/layout/mobile-dock";
+import { ScrollProgress } from "@/components/layout/scroll-progress";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { TopNav } from "@/components/layout/top-nav";
 import { SiteProviders } from "@/components/providers/site-providers";
@@ -17,7 +19,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
-  title: `${siteConfig.name} | ${siteConfig.role}`,
+  title: `${siteConfig.name} — ${siteConfig.role}`,
   description: siteConfig.description,
   applicationName: siteConfig.shortName,
   manifest: "/site.webmanifest",
@@ -32,7 +34,7 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   openGraph: {
-    title: `${siteConfig.name} | ${siteConfig.role}`,
+    title: `${siteConfig.name} — ${siteConfig.role}`,
     description: siteConfig.description,
     url: siteConfig.siteUrl,
     siteName: siteConfig.shortName,
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | ${siteConfig.role}`,
+    title: `${siteConfig.name} — ${siteConfig.role}`,
     description: siteConfig.description,
     images: ["/og-image.png"]
   },
@@ -75,6 +77,7 @@ export default function RootLayout({
       <body className={`${spaceGrotesk.variable} bg-background font-sans text-foreground antialiased`}>
         <SiteProviders>
           <div className="relative min-h-screen overflow-x-clip">
+            <ScrollProgress />
             <div
               aria-hidden="true"
               className="pointer-events-none fixed inset-0 z-[-2] bg-[radial-gradient(circle_at_top,rgba(139,92,246,0.18),transparent_24%),linear-gradient(180deg,#060914_0%,#050816_45%,#040611_100%)]"
@@ -84,6 +87,7 @@ export default function RootLayout({
             <main className="pb-28 md:pb-0">{children}</main>
             <SiteFooter />
             <MobileDock />
+            <BackToTop />
           </div>
         </SiteProviders>
       </body>

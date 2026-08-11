@@ -223,10 +223,12 @@ export default function ContactSection() {
                       autoComplete="name"
                       value={form.name}
                       onChange={(event) => handleChange("name", event.target.value)}
-                      className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30"
+                      aria-invalid={Boolean(errors.name)}
+                      aria-describedby={errors.name ? "name-error" : undefined}
+                      className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30 focus-visible:ring-2 focus-visible:ring-violet-400"
                       placeholder="Your name"
                     />
-                    {errors.name ? <p className="text-sm text-rose-300">{errors.name}</p> : null}
+                    {errors.name ? <p id="name-error" className="text-sm text-rose-300">{errors.name}</p> : null}
                   </div>
 
                   <div className="space-y-2">
@@ -240,10 +242,12 @@ export default function ContactSection() {
                       autoComplete="email"
                       value={form.email}
                       onChange={(event) => handleChange("email", event.target.value)}
-                      className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30"
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? "email-error" : undefined}
+                      className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30 focus-visible:ring-2 focus-visible:ring-violet-400"
                       placeholder="you@company.com"
                     />
-                    {errors.email ? <p className="text-sm text-rose-300">{errors.email}</p> : null}
+                    {errors.email ? <p id="email-error" className="text-sm text-rose-300">{errors.email}</p> : null}
                   </div>
                 </div>
 
@@ -259,7 +263,7 @@ export default function ContactSection() {
                     name="subject"
                     value={form.subject}
                     onChange={(event) => handleChange("subject", event.target.value)}
-                    className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30"
+                    className="h-12 w-full rounded-2xl border border-white/10 bg-black/20 px-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30 focus-visible:ring-2 focus-visible:ring-violet-400"
                     placeholder="Role, collaboration, product challenge..."
                   />
                 </div>
@@ -277,14 +281,18 @@ export default function ContactSection() {
                     rows={7}
                     value={form.message}
                     onChange={(event) => handleChange("message", event.target.value)}
-                    className="w-full rounded-[1.5rem] border border-white/10 bg-black/20 px-4 py-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30"
+                    aria-invalid={Boolean(errors.message)}
+                    aria-describedby={errors.message ? "message-error" : undefined}
+                    className="w-full rounded-[1.5rem] border border-white/10 bg-black/20 px-4 py-4 text-white outline-none transition focus:border-violet-300/40 focus:bg-black/30 focus-visible:ring-2 focus-visible:ring-violet-400"
                     placeholder="Tell me what you're building, the role, the timeline, and what kind of engineering ownership you need."
                   />
-                  {errors.message ? <p className="text-sm text-rose-300">{errors.message}</p> : null}
+                  {errors.message ? <p id="message-error" className="text-sm text-rose-300">{errors.message}</p> : null}
                 </div>
 
                 {status ? (
                   <div
+                    role="status"
+                    aria-live="polite"
                     className={`rounded-[1.3rem] border px-4 py-3 text-sm ${
                       status.type === "success"
                         ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-100"

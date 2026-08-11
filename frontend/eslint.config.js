@@ -17,8 +17,7 @@ const config = [
       "out/**",
       "build/**",
       "dist/**",
-      "next-env.d.ts",
-      "src/**"
+      "next-env.d.ts"
     ]
   }
 ];

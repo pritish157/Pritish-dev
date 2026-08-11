@@ -1,34 +1,49 @@
 "use client";
 
-import type { HTMLAttributes, MouseEvent } from "react";
-
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type SpotlightCardProps = HTMLAttributes<HTMLDivElement> & {
+export type SpotlightCardProps = React.HTMLAttributes<HTMLDivElement> & {
   accent?: string;
+  glow?: boolean;
 };
 
-export function SpotlightCard({ className, accent = "rgba(139,92,246,0.22)", ...props }: SpotlightCardProps) {
-  const handleMove = (event: MouseEvent<HTMLDivElement>) => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - bounds.left;
-    const y = event.clientY - bounds.top;
+export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(
+  ({ className, accent = "rgba(139, 92, 246, 0.22)", glow = false, children, ...props }, ref) => {
+    const cardRef = React.useRef<HTMLDivElement | null>(null);
 
-    event.currentTarget.style.setProperty("--spotlight-x", `${x}px`);
-    event.currentTarget.style.setProperty("--spotlight-y", `${y}px`);
-    event.currentTarget.style.setProperty("--spotlight-accent", accent);
-  };
+    React.useImperativeHandle(ref, () => cardRef.current!);
 
-  return (
-    <div
-      onMouseMove={handleMove}
-      className={cn(
-        "group relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.04] shadow-soft backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-white/15 hover:bg-white/[0.055]",
-        "before:pointer-events-none before:absolute before:inset-0 before:opacity-0 before:transition before:duration-500 before:content-[''] group-hover:before:opacity-100 before:[background:radial-gradient(420px_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-accent),transparent_45%)]",
-        "after:pointer-events-none after:absolute after:inset-px after:rounded-[calc(1.75rem-1px)] after:border after:border-white/[0.08] after:content-['']",
-        className
-      )}
-      {...props}
-    />
-  );
-}
+    const handleMouseMove = React.useCallback(
+      (event: React.MouseEvent<HTMLDivElement>) => {
+        if (!cardRef.current) return;
+        const bounds = cardRef.current.getBoundingClientRect();
+        const x = event.clientX - bounds.left;
+        const y = event.clientY - bounds.top;
+
+        cardRef.current.style.setProperty("--spotlight-x", `${x}px`);
+        cardRef.current.style.setProperty("--spotlight-y", `${y}px`);
+        cardRef.current.style.setProperty("--spotlight-accent", accent);
+      },
+      [accent]
+    );
+
+    return (
+      <div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        className={cn(
+          "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-soft backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-hover",
+          "before:pointer-events-none before:absolute before:-inset-px before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-500 group-hover:before:opacity-100 before:[background:radial-gradient(500px_circle_at_var(--spotlight-x)_var(--spotlight-y),var(--spotlight-accent),transparent_45%)]",
+          glow && "shadow-glow border-violet-500/30",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+SpotlightCard.displayName = "SpotlightCard";

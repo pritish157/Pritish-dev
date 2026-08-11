@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion, useScroll, useTransform, type Variants } from "framer-motion";
-import { RiArrowDownLine, RiArrowRightUpLine, RiGithubFill, RiSparklingLine } from "react-icons/ri";
+import { useEffect, useState } from "react";
+import {
+  RiArrowDownLine,
+  RiArrowRightUpLine,
+  RiDownloadLine,
+  RiGithubFill,
+  RiLinkedinBoxFill,
+  RiMailLine,
+  RiSparklingLine
+} from "react-icons/ri";
 
+import { AvailabilityBadge } from "@/components/layout/availability-badge";
 import { MagneticLink } from "@/components/ui/magnetic-link";
-import { heroSignals, quickAccessLinks, siteConfig } from "@/lib/data/portfolio";
+import { MetricCard } from "@/components/ui/metric-card";
+import { credibilityMetrics, heroSignals, quickAccessLinks, siteConfig } from "@/lib/data/portfolio";
 import { useAmbientMotion } from "@/lib/hooks/use-ambient-motion";
 
 const container: Variants = {
@@ -13,19 +23,19 @@ const container: Variants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.08
+      staggerChildren: 0.08,
+      delayChildren: 0.05
     }
   }
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 22 },
+  hidden: { opacity: 0, y: 20 },
   show: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
+      duration: 0.6,
       ease: [0.22, 1, 0.36, 1] as const
     }
   }
@@ -33,8 +43,14 @@ const item: Variants = {
 
 function SystemTerminal() {
   const [displayText, setDisplayText] = useState("");
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (reduceMotion) {
+      setDisplayText("> SYSTEM.READY // OPEN FOR IMPACT.");
+      return;
+    }
+
     const lines = [
       "> INITIALIZING MERN STACK...",
       "> LOADING PYTHON ALGORITHMS...",
@@ -48,24 +64,24 @@ function SystemTerminal() {
 
     const type = () => {
       const fullString = lines[currentLine];
-      
+
       if (!isDeleting) {
         setDisplayText(fullString.substring(0, currentChar + 1));
         currentChar++;
-        
+
         if (currentChar === fullString.length) {
           if (currentLine === lines.length - 1) {
-            return; // Stop at the last line
+            return;
           }
           isDeleting = true;
-          timer = setTimeout(type, 1500);
+          timer = setTimeout(type, 1600);
         } else {
-          timer = setTimeout(type, 40);
+          timer = setTimeout(type, 35);
         }
       } else {
         setDisplayText(fullString.substring(0, currentChar - 1));
         currentChar--;
-        
+
         if (currentChar === 0) {
           isDeleting = false;
           currentLine = (currentLine + 1) % lines.length;
@@ -76,50 +92,62 @@ function SystemTerminal() {
       }
     };
 
-    timer = setTimeout(type, 1000);
+    timer = setTimeout(type, 800);
     return () => clearTimeout(timer);
-  }, []);
+  }, [reduceMotion]);
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0A]/90 shadow-luxe font-mono backdrop-blur-2xl">
-      <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.02] px-5 py-4">
-        <div className="flex gap-2">
+    <div
+      aria-label="System status telemetry terminal"
+      className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#060814]/90 font-mono shadow-[0_24px_80px_rgba(0,0,0,0.7)] backdrop-blur-2xl"
+    >
+      {/* Terminal Bar */}
+      <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.02] px-5 py-3.5">
+        <div className="flex items-center gap-2">
           <div className="h-3 w-3 rounded-full bg-rose-500/80" />
           <div className="h-3 w-3 rounded-full bg-amber-500/80" />
           <div className="h-3 w-3 rounded-full bg-emerald-500/80" />
+          <span className="ml-2 text-xs uppercase tracking-widest text-slate-400">sys-status // root</span>
         </div>
-        <span className="ml-3 text-[0.7rem] uppercase tracking-widest text-slate-500">sys-status // root</span>
+        <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-emerald-300">
+          Operational
+        </span>
       </div>
-      
-      <div className="p-5 sm:p-8 space-y-6">
-        <div className="flex items-start sm:items-center gap-2 text-xs sm:text-sm md:text-base text-emerald-400 min-h-[2.5rem] sm:min-h-[1.5rem]">
+
+      {/* Terminal Content */}
+      <div className="space-y-5 p-5 sm:p-7">
+        <div className="flex min-h-[2.5rem] items-center gap-2 text-xs text-emerald-400 sm:text-sm md:text-base">
           <span className="leading-relaxed">{displayText}</span>
-          <motion.span 
-            animate={{ opacity: [1, 0] }} 
-            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-            className="mt-1 sm:mt-0 inline-block h-4 w-2 sm:h-5 bg-emerald-400 shrink-0"
-          />
+          {!reduceMotion && (
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+              className="inline-block h-4 w-2 shrink-0 bg-emerald-400 sm:h-5"
+            />
+          )}
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-           <div className="rounded-[1.2rem] border border-white/5 bg-white/[0.02] p-4">
-             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Core Engine</p>
-             <p className="mt-2 text-sm text-slate-200">Node.js / Python</p>
-           </div>
-           <div className="rounded-[1.2rem] border border-white/5 bg-white/[0.02] p-4">
-             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-500">Focus</p>
-             <p className="mt-2 text-sm text-slate-200">High-Performance Arch</p>
-           </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Core Engine</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">Node.js / Python / React</p>
+          </div>
+          <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Focus Area</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">High-Performance Arch</p>
+          </div>
         </div>
-        
-        <div className="rounded-[1.2rem] border border-violet-500/20 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 p-5 mt-4">
-           <div className="flex items-start gap-4">
-              <div className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.9)]" />
-              <div>
-                <p className="text-sm font-medium tracking-wide text-violet-100 uppercase">Available for Hire</p>
-                <p className="mt-1 text-[13px] leading-relaxed text-violet-200/70">Ready to engineer product workflows and secure backend systems for high-impact roles.</p>
-              </div>
-           </div>
+
+        <div className="rounded-[1.2rem] border border-violet-500/25 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 p-4 sm:p-5">
+          <div className="flex items-start gap-3.5">
+            <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.9)]" />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-violet-200">Available for Impact</p>
+              <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                Ready to engineer production product systems, AI workflows, and secure backend platforms.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -132,112 +160,181 @@ export function HeroSection() {
   const { scrollYProgress } = useScroll();
   const panelY = useTransform(scrollYProgress, [0, 0.2], [0, reduceMotion || !ambientMotion ? 0 : 36]);
 
+  const handleScrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const target = document.getElementById("projects");
+    if (target) {
+      target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    }
+  };
+
   return (
     <section
       id="profile"
       data-nav-section
-      className="content-auto relative isolate min-h-screen overflow-hidden px-4 pb-20 pt-32 sm:px-6 lg:pt-36"
+      aria-label="Hero Introduction"
+      className="content-auto relative isolate min-h-screen overflow-hidden px-4 pb-20 pt-28 sm:px-6 lg:pt-36"
     >
-      <div className="absolute inset-0 -z-20 bg-mesh-main opacity-90" />
-      <div className="absolute inset-0 -z-10 bg-hero-grid bg-[size:72px_72px] opacity-[0.06]" />
-      <div className="absolute left-[6%] top-24 -z-10 h-72 w-72 rounded-full bg-violet-500/25 blur-[120px]" />
-      <div className="absolute right-[10%] top-[18%] -z-10 h-80 w-80 rounded-full bg-fuchsia-500/20 blur-[140px]" />
-      <div className="absolute bottom-[8%] left-1/2 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-blue-500/10 blur-[110px]" />
+      {/* Background Ambience */}
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-mesh-main opacity-90" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-grid bg-[size:72px_72px] opacity-[0.06]" />
+      <div className="pointer-events-none absolute left-[5%] top-20 -z-10 h-80 w-80 rounded-full bg-violet-500/20 blur-[130px]" />
+      <div className="pointer-events-none absolute right-[8%] top-[15%] -z-10 h-96 w-96 rounded-full bg-fuchsia-500/18 blur-[150px]" />
+      <div className="pointer-events-none absolute bottom-[10%] left-1/2 -z-10 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[120px]" />
 
-      <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(420px,0.95fr)] lg:items-center">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(400px,0.9fr)] lg:items-center lg:gap-16">
+        {/* Left Main Content */}
         <motion.div variants={container} initial="hidden" animate="show" className="max-w-3xl">
-          <motion.div
-            variants={item}
-            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-xs uppercase tracking-[0.2em] text-slate-300"
-          >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inset-0 animate-ping rounded-full bg-emerald-300/80" />
-              <span className="relative rounded-full bg-emerald-300 p-[5px] shadow-[0_0_16px_rgba(74,222,128,0.8)]" />
+          {/* Eyebrows & Availability */}
+          <motion.div variants={item} className="flex flex-wrap items-center gap-3">
+            <AvailabilityBadge showText={true} />
+            <span className="inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-500/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-violet-200 backdrop-blur-md">
+              {siteConfig.role}
             </span>
-            {siteConfig.availability}
           </motion.div>
 
-          <motion.div variants={item} className="mt-8 space-y-6">
-            <p className="text-sm uppercase tracking-[0.32em] text-violet-200/80">Backend engineering - AI-era product systems</p>
-            <h1 className="font-display text-[clamp(3.25rem,7vw,6.4rem)] font-semibold leading-[0.92] tracking-[-0.08em] text-white">
+          {/* Primary Headline & Description */}
+          <motion.div variants={item} className="mt-7 space-y-5">
+            <h1 className="font-display text-[clamp(2.75rem,6vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-white">
               Building AI-era
               <span className="block bg-gradient-to-r from-white via-violet-200 to-fuchsia-200 bg-clip-text text-transparent">
                 backends with
               </span>
-              <span className="block text-white/82">full-stack gravity.</span>
+              <span className="block text-slate-300">full-stack gravity.</span>
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-slate-400 sm:text-lg">{siteConfig.subheadline}</p>
+
+            <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg lg:text-xl font-normal">
+              {siteConfig.subheadline}
+            </p>
           </motion.div>
 
-          <motion.div variants={item} className="mt-8 flex flex-wrap gap-4">
-            <MagneticLink href="#projects" size="lg">
+          {/* Primary Call to Actions */}
+          <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-4">
+            <MagneticLink href="#projects" size="lg" onClick={handleScrollToProjects}>
               Explore flagship work
               <RiArrowRightUpLine className="h-4 w-4" />
             </MagneticLink>
-            <MagneticLink href={siteConfig.github} variant="secondary" size="lg" external>
-              GitHub profile
-              <RiGithubFill className="h-4 w-4" />
+
+            <MagneticLink href={siteConfig.resumePath} variant="secondary" size="lg" external>
+              Download Resume
+              <RiDownloadLine className="h-4 w-4 text-violet-300" />
             </MagneticLink>
           </motion.div>
 
-          <motion.div variants={item} className="mt-8 flex flex-wrap gap-3">
+          {/* Secondary Quick Access Links */}
+          <motion.div variants={item} className="mt-6 flex flex-wrap items-center gap-2">
+            <span className="mr-1 text-xs font-medium uppercase tracking-wider text-slate-400">Direct Profiles:</span>
+            <a
+              href={siteConfig.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            >
+              <RiGithubFill className="h-4 w-4 text-slate-300" />
+              <span>GitHub</span>
+            </a>
+            <a
+              href={siteConfig.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            >
+              <RiLinkedinBoxFill className="h-4 w-4 text-violet-300" />
+              <span>LinkedIn</span>
+            </a>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              aria-label="Email Contact"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-slate-300 transition hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            >
+              <RiMailLine className="h-4 w-4 text-emerald-300" />
+              <span>Email</span>
+            </a>
+          </motion.div>
+
+          {/* Hero Signals */}
+          <motion.div variants={item} className="mt-7 flex flex-wrap gap-2.5">
             {heroSignals.map((signal) => (
               <span
                 key={signal}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-slate-300"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs text-slate-300 backdrop-blur-md"
               >
-                <RiSparklingLine className="h-4 w-4 text-violet-300" />
+                <RiSparklingLine className="h-3.5 w-3.5 text-violet-300" />
                 {signal}
               </span>
             ))}
           </motion.div>
 
-          <motion.div variants={item} className="mt-10 rounded-[1.8rem] border border-white/10 bg-white/[0.04] p-4 shadow-soft backdrop-blur-xl sm:p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          {/* Credibility Metrics Grid */}
+          <motion.div variants={item} className="mt-9">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Verified System Metrics</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {credibilityMetrics.map((metric, idx) => (
+                <MetricCard
+                  key={metric.label}
+                  value={metric.value}
+                  label={metric.label}
+                  glow={idx === 0}
+                  className="p-4"
+                />
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Quick Launchpad Cards */}
+          <motion.div
+            variants={item}
+            className="mt-8 rounded-[1.8rem] border border-white/10 bg-white/[0.03] p-4 shadow-soft backdrop-blur-xl sm:p-5"
+          >
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-violet-200/80">Quick launchpad</p>
-                <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-400">
-                  Portfolio, profiles, and live project proof surfaced in one place for a faster mobile scan.
+                <p className="text-xs font-semibold uppercase tracking-wider text-violet-200">Flagship System Proof</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
+                  Direct access to live production systems and code repositories.
                 </p>
               </div>
-              <span className="inline-flex w-fit rounded-full border border-white/10 bg-black/20 px-3 py-2 text-xs uppercase tracking-[0.16em] text-slate-300">
-                6 direct links
+              <span className="inline-flex w-fit rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs uppercase tracking-wider text-slate-300">
+                Live Proof
               </span>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {quickAccessLinks.map((link) => (
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {quickAccessLinks.slice(0, 4).map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
-                  rel="noreferrer"
-                  className="group flex items-start justify-between gap-3 rounded-[1.35rem] border border-white/10 bg-black/20 px-4 py-4 transition hover:border-white/20 hover:bg-black/25"
+                  rel="noopener noreferrer"
+                  className="group flex items-start justify-between gap-3 rounded-[1.2rem] border border-white/10 bg-black/30 p-3.5 transition-all duration-300 hover:border-violet-500/30 hover:bg-black/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
                 >
-                  <div>
-                    <p className="text-sm font-semibold text-white">{link.label}</p>
-                    <p className="mt-1 text-xs uppercase tracking-[0.16em] text-violet-200/75">{link.shortLabel}</p>
-                    <p className="mt-3 text-sm leading-6 text-slate-400">{link.description}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">{link.label}</p>
+                    <p className="mt-0.5 text-[11px] font-medium uppercase tracking-wider text-violet-300/80">{link.shortLabel}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400 line-clamp-2">{link.description}</p>
                   </div>
-                  <RiArrowRightUpLine className="mt-1 h-4 w-4 shrink-0 text-slate-400 transition group-hover:text-white" />
+                  <RiArrowRightUpLine className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
                 </a>
               ))}
             </div>
           </motion.div>
         </motion.div>
 
+        {/* Right Column: Telemetry Terminal */}
         <motion.div style={{ y: panelY }} className="relative">
-          <div className="absolute inset-x-[10%] bottom-0 h-28 rounded-full bg-violet-500/30 blur-[90px]" />
+          <div className="pointer-events-none absolute inset-x-[10%] bottom-0 h-32 rounded-full bg-violet-500/25 blur-[100px]" />
           <SystemTerminal />
         </motion.div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 lg:flex">
-        <span className="text-[0.7rem] uppercase tracking-[0.24em] text-slate-500">Scroll to enter</span>
-        <div className="flex h-14 w-9 items-start justify-center rounded-full border border-white/10 bg-white/[0.03] p-2">
-          <div className="h-3 w-3 animate-scroll-hint rounded-full bg-violet-300" />
+      {/* Animated Scroll Hint */}
+      <div className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex">
+        <span className="text-[10px] uppercase tracking-[0.24em] text-slate-400">Scroll to explore</span>
+        <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/15 bg-white/[0.03] p-1.5">
+          <div className="h-2 w-2 animate-bounce rounded-full bg-violet-300 shadow-[0_0_8px_rgba(167,139,250,0.8)]" />
         </div>
-        <RiArrowDownLine className="h-4 w-4 text-slate-500" />
+        <RiArrowDownLine className="h-3.5 w-3.5 text-slate-400" />
       </div>
     </section>
   );

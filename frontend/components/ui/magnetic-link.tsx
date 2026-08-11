@@ -14,6 +14,7 @@ type MagneticLinkProps = {
   variant?: "default" | "secondary" | "ghost";
   size?: "default" | "sm" | "lg";
   external?: boolean;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function MagneticLink({
@@ -22,7 +23,8 @@ export function MagneticLink({
   className,
   variant = "default",
   size = "default",
-  external = false
+  external = false,
+  onClick
 }: MagneticLinkProps) {
   const ref = useRef<HTMLAnchorElement>(null);
 
@@ -69,14 +71,14 @@ export function MagneticLink({
 
   if (external) {
     return (
-      <a ref={ref} href={href} target="_blank" rel="noreferrer" className={classes}>
+      <a ref={ref} href={href} target="_blank" rel="noreferrer" onClick={onClick} className={classes}>
         {children}
       </a>
     );
   }
 
   return (
-    <Link ref={ref} href={href} className={classes}>
+    <Link ref={ref} href={href} onClick={onClick} className={classes}>
       {children}
     </Link>
   );

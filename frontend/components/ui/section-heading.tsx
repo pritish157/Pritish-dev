@@ -1,23 +1,44 @@
+import * as React from "react";
 import { Badge } from "@/components/ui/badge";
+import { Heading } from "@/components/ui/heading";
+import { Subheading } from "@/components/ui/subheading";
 import { cn } from "@/lib/utils";
 
-type SectionHeadingProps = {
-  eyebrow: string;
+export type SectionHeadingProps = React.HTMLAttributes<HTMLDivElement> & {
+  eyebrow?: string;
   title: string;
-  description: string;
+  description?: string;
   align?: "left" | "center";
 };
 
-export function SectionHeading({ eyebrow, title, description, align = "left" }: SectionHeadingProps) {
-  return (
-    <div className={cn("max-w-3xl space-y-5", align === "center" && "mx-auto text-center")}>
-      <Badge className="border-violet-400/20 bg-violet-500/10 text-violet-200">{eyebrow}</Badge>
-      <div className="space-y-4">
-        <h2 className="font-display text-3xl font-semibold tracking-[-0.06em] text-white sm:text-4xl lg:text-5xl">
+export const SectionHeading = React.forwardRef<HTMLDivElement, SectionHeadingProps>(
+  ({ className, eyebrow, title, description, align = "left", ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "max-w-3xl space-y-4 mb-12 sm:mb-16",
+          align === "center" && "mx-auto text-center",
+          className
+        )}
+        {...props}
+      >
+        {eyebrow && (
+          <div>
+            <Badge variant="accent">{eyebrow}</Badge>
+          </div>
+        )}
+        <Heading level={2} size="h2">
           {title}
-        </h2>
-        <p className="max-w-2xl text-sm leading-7 text-slate-400 sm:text-base">{description}</p>
+        </Heading>
+        {description && (
+          <Subheading size="large" className={align === "center" ? "mx-auto" : ""}>
+            {description}
+          </Subheading>
+        )}
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+SectionHeading.displayName = "SectionHeading";

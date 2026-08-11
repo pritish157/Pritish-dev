@@ -9,23 +9,89 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#050816",
-        foreground: "#ffffff",
-        muted: "#94A3B8",
-        border: "rgba(255,255,255,0.08)",
-        card: "rgba(255,255,255,0.04)",
-        primary: "#8B5CF6",
-        secondary: "#A855F7",
-        glow: "rgba(139,92,246,0.35)"
+        background: "var(--surface-base)",
+        foreground: "var(--foreground)",
+        muted: "var(--muted)",
+        dimmed: "var(--dimmed)",
+        border: "var(--border)",
+        card: "var(--surface-card)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)"
+        },
+        secondary: "var(--secondary)",
+        glow: "var(--glow)",
+        accent: {
+          blue: "var(--accent-blue)",
+          violet: "var(--accent-violet)",
+          fuchsia: "var(--accent-fuchsia)",
+          purple: "var(--accent-purple)",
+          lightPurple: "var(--accent-light-purple)"
+        },
+        surface: {
+          base: "var(--surface-base)",
+          tier1: "var(--surface-tier-1)",
+          tier2: "var(--surface-tier-2)",
+          tier3: "var(--surface-tier-3)",
+          card: "var(--surface-card)"
+        },
+        status: {
+          success: "var(--success)",
+          successBg: "var(--success-bg)",
+          warning: "var(--warning)",
+          warningBg: "var(--warning-bg)",
+          danger: "var(--danger)",
+          dangerBg: "var(--danger-bg)",
+          info: "var(--info)",
+          infoBg: "var(--info-bg)"
+        }
       },
       fontFamily: {
         display: ["var(--font-space)", "Space Grotesk", "sans-serif"],
-        sans: ["General Sans", "Satoshi", "var(--font-space)", "system-ui", "sans-serif"]
+        sans: ["var(--font-sans)", "General Sans", "Satoshi", "system-ui", "sans-serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"]
       },
       boxShadow: {
-        soft: "0 18px 60px rgba(10, 10, 30, 0.35)",
-        glow: "0 0 0 1px rgba(139, 92, 246, 0.15), 0 24px 80px rgba(81, 43, 161, 0.25)",
-        luxe: "0 30px 120px rgba(4, 7, 20, 0.7)"
+        soft: "var(--shadow-soft)",
+        medium: "var(--shadow-medium)",
+        large: "var(--shadow-large)",
+        glow: "var(--shadow-glow)",
+        accentGlow: "var(--shadow-accent-glow)",
+        inset: "var(--shadow-inset)",
+        hover: "var(--shadow-hover)",
+        luxe: "var(--shadow-luxe)"
+      },
+      borderRadius: {
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        xl: "var(--radius-xl)",
+        "2xl": "var(--radius-2xl)",
+        "4xl": "var(--radius-4xl)",
+        full: "var(--radius-full)"
+      },
+      spacing: {
+        "1": "var(--space-1)",
+        "2": "var(--space-2)",
+        "3": "var(--space-3)",
+        "4": "var(--space-4)",
+        "5": "var(--space-5)",
+        "6": "var(--space-6)",
+        "8": "var(--space-8)",
+        "10": "var(--space-10)",
+        "12": "var(--space-12)",
+        "16": "var(--space-16)",
+        "20": "var(--space-20)",
+        "24": "var(--space-24)"
+      },
+      zIndex: {
+        below: "var(--z-below)",
+        base: "var(--z-base)",
+        above: "var(--z-above)",
+        dock: "var(--z-dock)",
+        nav: "var(--z-nav)",
+        modal: "var(--z-modal)",
+        toast: "var(--z-toast)"
       },
       backgroundImage: {
         "mesh-main":
@@ -69,9 +135,6 @@ const config: Config = {
         marquee: "marquee 24s linear infinite",
         shimmer: "shimmer 6s linear infinite",
         "scroll-hint": "scrollHint 1.8s ease-in-out infinite"
-      },
-      borderRadius: {
-        "4xl": "2rem"
       }
     }
   },

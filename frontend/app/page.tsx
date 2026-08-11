@@ -39,11 +39,20 @@ export default function HomePage() {
     sameAs: [siteConfig.github, siteConfig.linkedin]
   };
 
+  const websiteStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: `${siteConfig.name} Portfolio`,
+    url: siteConfig.siteUrl
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([personStructuredData, websiteStructuredData])
+        }}
       />
       <HeroSection />
       <TrustBar />
