@@ -36,10 +36,25 @@ export type Project = {
   highlights: string[];
 };
 
-export type TimelineItem = {
+export type WorkExperience = {
+  company: string;
+  location: string;
+  role: string;
   period: string;
+  bullets: string[];
+  technologies: string[];
+};
+
+export type Education = {
+  degree: string;
+  institution: string;
+  location: string;
+  period: string;
+};
+
+export type Certification = {
   title: string;
-  description: string;
+  issuer: string;
 };
 
 export type SkillGroup = {
@@ -52,19 +67,20 @@ export type SkillGroup = {
 export const siteConfig = {
   name: "Pritish Kumar Panda",
   shortName: "Pritish.dev",
-  role: "Backend Engineer With Full-Stack Depth",
-  headline: "Building AI-era frontends with production-grade systems underneath.",
+  role: "Backend Developer · MERN Stack Engineer",
+  headline: "Designing & shipping production-grade REST APIs, secure auth & real-time systems.",
   subheadline:
-    "I craft cinematic product interfaces, secure backend workflows, and performance-first web experiences that feel engineered from the first scroll.",
+    "B.Tech CSE (2026) graduate specialized in Node.js/Express REST API design, secure JWT + TOTP 2FA authentication, MongoDB query optimization, Socket.io real-time systems, and payment gateway integration.",
   description:
-    "Premium portfolio of Pritish Kumar Panda, a frontend engineer with full-stack depth building modern product systems with Next.js, React, Node.js, realtime workflows, security-minded architecture, and AI-ready interaction design.",
+    "Official engineering portfolio of Pritish Kumar Panda — Backend-focused Full-Stack Developer skilled in Node.js, Express.js, MongoDB, REST API Architecture, TOTP 2FA, Razorpay, Docker, and CI/CD.",
   email: "pritishpanda157@gmail.com",
+  phone: "+91-6372591970",
   location: "India",
   siteUrl: "https://pritish-dev.vercel.app",
   github: "https://github.com/pritish157",
-  linkedin: "https://www.linkedin.com/in/pritish-kumar-panda-dev/",
+  linkedin: "https://www.linkedin.com/in/pritish-kumar-panda-dev",
   resumePath: "/pritish-resume.pdf",
-  availability: "Open to 2026 full-time, internship, and selective freelance opportunities"
+  availability: "Seeking Backend or Full-Stack Developer roles (2026)"
 } as const;
 
 export const navigation: NavItem[] = [
@@ -87,225 +103,228 @@ export const quickAccessLinks: ExternalLink[] = [
     label: "GitHub",
     href: siteConfig.github,
     shortLabel: "@pritish157",
-    description: "Main GitHub profile with public code and activity.",
+    description: "Main GitHub profile with public code repositories.",
     category: "profile"
   },
   {
     label: "LinkedIn",
     href: siteConfig.linkedin,
     shortLabel: "Connect",
-    description: "Professional profile, updates, and hiring context.",
+    description: "Professional profile, updates, and career history.",
     category: "profile"
-  },
-  {
-    label: "AstroAgent",
-    href: "https://astro-agent-wheat.vercel.app",
-    shortLabel: "Live project",
-    description: "Stateful AI astrologer with LangGraph and natal charts.",
-    category: "project"
   },
   {
     label: "Knot of Love",
     href: "https://knot-of-love.vercel.app",
-    shortLabel: "Live project",
-    description: "Realtime trust-focused product with chat and moderation.",
+    shortLabel: "Matrimonial Platform",
+    description: "40+ REST endpoints, TOTP 2FA, Socket.io chat, GitHub Actions CI/CD.",
     category: "project"
   },
   {
     label: "Vireon",
     href: "https://vireon-swart.vercel.app",
-    shortLabel: "Live project",
-    description: "Event management app with clean UI and workflows.",
+    shortLabel: "Event Platform",
+    description: "10+ REST endpoints, Razorpay payment engine, concurrency seat protection.",
+    category: "project"
+  },
+  {
+    label: "AstroAgent",
+    href: "https://astro-agent-wheat.vercel.app",
+    shortLabel: "AI Assistant",
+    description: "LLM API orchestration backend, middleware, and Jest test suite.",
     category: "project"
   }
 ];
 
 export const heroSignals = [
-  "Premium product interfaces with technical depth",
-  "Realtime, trust-sensitive, and workflow-heavy systems",
-  "Obsessive performance, motion, and shipping discipline"
+  "Production-grade Node.js / Express REST API Design",
+  "Secure Auth: JWT Session Management + TOTP 2FA",
+  "MongoDB Aggregations, Indexing & Query Optimisation",
+  "Realtime Systems with Socket.io & Payment Gates (Razorpay)"
 ];
 
 export const credibilityMetrics: Metric[] = [
-  { label: "Flagship systems", value: "03" },
-  { label: "Product endpoints", value: "58+" },
-  { label: "Realtime + trust flows", value: "Socket + KYC" },
-  { label: "Deployment pattern", value: "Render + Vercel" }
+  { label: "REST Endpoints Shipped", value: "58+" },
+  { label: "MERN Stack Systems", value: "03" },
+  { label: "Industry Internships", value: "02" },
+  { label: "B.Tech CSE Degree", value: "2026" }
 ];
 
 export const trustPills = [
-  "Next.js 15",
-  "TypeScript",
-  "Framer Motion",
-  "GSAP",
-  "Lenis",
   "Node.js",
+  "Express.js",
+  "REST API Design",
   "MongoDB",
-  "Socket.IO",
-  "JWT Auth",
-  "AI-ready UX",
-  "Performance-first UI",
-  "Product systems"
+  "JWT + TOTP 2FA",
+  "Socket.io",
+  "Razorpay",
+  "React.js",
+  "Next.js",
+  "Docker",
+  "GitHub Actions",
+  "Jest / Supertest"
 ];
 
 export const credibilityNotes = [
   {
-    title: "GitHub-proof work",
-    detail: "Public builds, live systems, and repo-linked engineering signals."
+    title: "GitHub-Verified Code",
+    detail: "Production repos with 40+ REST endpoints, CI/CD pipelines, and clean architecture."
   },
   {
-    title: "Recruiter scan speed",
-    detail: "Clear product outcomes, architecture depth, and system metrics in one pass."
+    title: "Backend-First Rigor",
+    detail: "Deep expertise in REST API design, query optimization, security middleware, and auth flows."
   },
   {
-    title: "Best-fit roles",
-    detail: "Frontend-heavy product engineering, full-stack systems, and AI-native interfaces."
+    title: "Full-Stack Capability",
+    detail: "MERN stack proficiency with responsive React/Next.js frontends connected to robust Node servers."
   }
 ] as const;
 
 export const featuredProjects: Project[] = [
   {
-    id: "astro-agent",
-    title: "Aradhana AstroAgent",
-    eyebrow: "Agentic AI Astrologer",
-    summary:
-      "A stateful, multi-turn AI astrology agent built with LangGraph.js, featuring astronomical planetary longitude calculations, real-time Server-Sent Events (SSE) token streaming, and dynamic SVG natal chart generation.",
-    impact:
-      "Demonstrates advanced state machine flow control, real-time streamed responses, and mathematical client-side visualization in a production-ready system.",
-    accent: "#3B82F6",
-    preview: "agent",
-    stack: ["LangGraph.js", "Gemini 3.1", "Node.js", "Express", "MongoDB", "React", "Tailwind CSS", "SSE"],
-    metrics: [
-      { label: "Agent Architecture", value: "3-Node Stateful Graph" },
-      { label: "Execution Safeguard", value: "4-Step Hard Loop Cap" },
-      { label: "Calculations Engine", value: "astronomy-engine" },
-      { label: "Testing Suite", value: "30-case Golden Set" }
-    ],
-    links: {
-      live: "https://astro-agent-wheat.vercel.app",
-      github: "https://github.com/pritish157/Aradhana-Astroagent"
-    },
-    challenge:
-      "Ensuring the agent resolves complex birth chart details, filters sensitive questions (medical/financial/legal), and streams output in real time without entering infinite tool loops.",
-    outcome: [
-      "Built a stateful agent graph in LangGraph.js with routing logic based on rule-based fast paths and LLM intent classification.",
-      "Calculated exact celestial coordinate longitudes using astronomy-engine and computed Equal House Ascendant coordinates using spherical trigonometry.",
-      "Implemented a comprehensive evaluation runner with automatic tone scoring, geocoding validation, and Git hash tracking for regression testing."
-    ],
-    architecture: [
-      "Node.js + Express backend orchestrating API streams and database connections.",
-      "LangGraph.js state manager implementing the Router-Agent-Tools control loop.",
-      "MongoDB Atlas for session persistence, user profiles, and 30-day TTL geocoding cache.",
-      "Vite + React frontend displaying real-time streaming tokens and dynamic circular SVG charts."
-    ],
-    highlights: [
-      "Rigorous LLM-as-judge and deterministic testing harness.",
-      "Token-by-token streaming with Server-Sent Events (SSE).",
-      "Pure mathematical calculations with high precision."
-    ]
-  },
-  {
     id: "knot-of-love",
     title: "Knot of Love",
-    eyebrow: "Realtime trust platform",
+    eyebrow: "Matrimonial Platform",
     summary:
-      "A matrimonial product built around verified identity, realtime messaging, moderation workflows, and admin control surfaces.",
+      "Production-grade matrimonial platform featuring 40+ REST API endpoints, JWT + TOTP 2FA security, real-time Socket.io chat, and automated GitHub Actions CI/CD to Render.",
     impact:
-      "Combines chat speed, platform safety, and operational review into one coherent product system.",
+      "Architected complete backend infrastructure with role-based access control (Admin, User, Guest), TOTP time-based OTP validation, optimized MongoDB collections, and CDN media delivery.",
     accent: "#8B5CF6",
     preview: "chat",
-    stack: ["React", "Node.js", "MongoDB", "Socket.IO", "Firebase", "JWT"],
+    stack: ["Node.js", "Express.js", "MongoDB", "Socket.io", "JWT", "TOTP 2FA", "Cloudinary", "ImageKit", "GitHub Actions"],
     metrics: [
-      { label: "API surface", value: "40+ routes" },
-      { label: "Realtime layer", value: "Rooms + receipts" },
-      { label: "Trust stack", value: "KYC + moderation" },
-      { label: "Delivery", value: "Render + Vercel" }
+      { label: "API Endpoints", value: "40+ Routes" },
+      { label: "Security Layer", value: "JWT + TOTP 2FA" },
+      { label: "Realtime Systems", value: "Socket.io Chat" },
+      { label: "Deployment", value: "GitHub Actions → Render" }
     ],
     links: {
       live: "https://knot-of-love.vercel.app",
-      github: "https://github.com/pritish157/Knot-of-Love"
+      github: "https://github.com/pritish157/knot-of-love"
     },
     challenge:
-      "The core challenge was making a sensitive social product feel fast and modern without compromising verification, safety, or moderation boundaries.",
+      "Designing a high-trust matrimonial platform requiring multi-role permissions, secure two-factor authentication for sensitive routes, zero-downtime media delivery, and optimized search query performance.",
     outcome: [
-      "Realtime messaging with read receipts and presence-aware feedback.",
-      "KYC, block, archive, and report flows designed as first-class trust systems.",
-      "Admin workflows separated from user speed paths to keep the product safer and easier to evolve."
+      "Architected and implemented 40+ REST API endpoints (auth, user profiles, media, admin) with role-based access control for Admin, User, and Guest roles using Node.js/Express.js.",
+      "Designed and enforced secure authentication: JWT session management + TOTP 2FA with time-based OTP verification, protecting all sensitive routes.",
+      "Engineered real-time chat and notification system using Socket.io; integrated Cloudinary and ImageKit for media upload, transformation, and CDN delivery.",
+      "Applied MongoDB indexing and query optimisation across profile and search collections to improve data retrieval consistency and reduce query overhead.",
+      "Configured GitHub Actions CI/CD pipeline for automated testing and deployment to Render, enabling fast, repeatable production releases."
     ],
     architecture: [
-      "React client for discovery, profile journeys, chat, and admin surfaces.",
-      "Socket.IO rooms scoped to conversations instead of noisy global broadcasts.",
-      "Express APIs for auth, discovery, moderation, and verification workflows.",
-      "Firebase push notifications for offline engagement."
+      "Node.js + Express REST server handling 40+ endpoints with custom security middleware.",
+      "MongoDB database with query indexing across search and profile collections.",
+      "Socket.io server instance for bidirectional real-time chat rooms and notifications.",
+      "Cloudinary & ImageKit integrations for on-the-fly media transformations and global CDN delivery.",
+      "GitHub Actions automated CI/CD pipeline triggering automated tests and deployment to Render."
     ],
     highlights: [
-      "Proves full-stack ownership across UX, auth, realtime, and deployment.",
-      "Creates strong interview depth around trust-sensitive product design.",
-      "Shows system thinking beyond CRUD and dashboard cosmetics."
+      "40+ REST endpoints with granular RBAC (Admin, User, Guest).",
+      "Time-based OTP 2FA verification protecting sensitive actions.",
+      "Automated CI/CD deployment pipeline with Render and GitHub Actions."
     ]
   },
   {
     id: "vireon",
     title: "Vireon",
-    eyebrow: "Event product brand layer",
+    eyebrow: "Event Management Platform",
     summary:
-      "A modern event experience for discovery, registration, and organizer communication with a cleaner, product-facing interface.",
+      "Full-featured event management system with 10+ Express REST endpoints, end-to-end Razorpay payment processing, and server-side concurrent seat reservation safeguards.",
     impact:
-      "Turns operational event workflows into a polished user-facing system with clear hierarchy and role-aware behavior.",
+      "Streamlines complete event booking lifecycles with order creation, payment webhooks, concurrency control to prevent overbooking, and transactional NodeMailer OTP communications.",
     accent: "#A855F7",
     preview: "events",
-    stack: ["React", "Node.js", "Express", "MongoDB", "JWT", "Nodemailer"],
+    stack: ["Node.js", "Express.js", "MongoDB", "Razorpay", "NodeMailer", "JWT", "GitHub Actions"],
     metrics: [
-      { label: "User roles", value: "3 roles" },
-      { label: "Workflow", value: "Registration lifecycle" },
-      { label: "Core model", value: "5 collections" },
-      { label: "Automation", value: "Transactional email" }
+      { label: "REST Endpoints", value: "10+ Routes" },
+      { label: "Payment Gateway", value: "Razorpay Full Lifecycle" },
+      { label: "Concurrency", value: "Two-stage Seat Lock" },
+      { label: "Notifications", value: "NodeMailer OTP" }
     ],
     links: {
       live: "https://vireon-swart.vercel.app",
       github: "https://github.com/pritish157/vireon"
     },
     challenge:
-      "The surface needed to feel simple for attendees while still respecting organizer workflows, seat limits, deadlines, and state changes underneath.",
+      "Handling concurrent booking edge cases and preventing ticket overbooking while processing asynchronous payment verifications and refunds reliably.",
     outcome: [
-      "Role-aware journeys for admins, organizers, and attendees.",
-      "Sharper registration UX with confirmation-driven product feedback.",
-      "Cleaner product framing for an operations-heavy backend."
+      "Built 10+ Express.js REST endpoints with optimised query logic, response shaping, and error handling for event listings, bookings, and admin operations.",
+      "Integrated Razorpay end-to-end: order creation, checkout session, payment verification, refund processing, and webhook handling for async payment events.",
+      "Designed a two-stage seat reservation flow with server-side validation to handle concurrent booking edge cases and prevent overbooking.",
+      "Implemented NodeMailer OTP for account activation and booking confirmation emails; deployed continuously via GitHub Actions CI/CD."
     ],
     architecture: [
-      "Responsive React UI for event browsing, registration, and organizer actions.",
-      "Express routes for event publishing, permissions, and workflow rules.",
-      "MongoDB models for events, registrations, and analytics slices.",
-      "Email automation for confirmations and organizer updates."
+      "Express.js backend providing 10+ endpoints with custom response shaping and centralized error handling.",
+      "Razorpay integration managing checkout sessions, webhook secret verification, and refund state management.",
+      "Two-stage database reservation lock ensuring seat integrity during peak booking spikes.",
+      "NodeMailer integration for asynchronous transactional emails (OTP activation & booking confirmations)."
     ],
     highlights: [
-      "Shows frontend polish without hiding the workflow logic underneath.",
-      "Good proof for product engineering roles that care about clarity and system behavior.",
-      "Balances consumer UX with operational requirements."
+      "End-to-end Razorpay integration with secure webhook verification.",
+      "Two-stage server-side seat reservation logic preventing overbooking.",
+      "NodeMailer transactional OTP workflow and continuous deployment."
+    ]
+  },
+  {
+    id: "astro-agent",
+    title: "AstroAgent",
+    eyebrow: "AI-Powered Conversational Assistant",
+    summary:
+      "Node.js/Express backend orchestrating LLM API calls, managing session query histories, and executing rate-aware prompt middleware with Jest endpoint unit test coverage.",
+    impact:
+      "Delivers rapid structured responses from LLM APIs with robust request validation, rate control, and automated endpoint verification.",
+    accent: "#3B82F6",
+    preview: "agent",
+    stack: ["Node.js", "Express.js", "LLM APIs", "Jest", "Middleware", "JavaScript"],
+    metrics: [
+      { label: "Backend Core", value: "Node.js / Express" },
+      { label: "LLM Orchestration", value: "Rate-Aware Pipeline" },
+      { label: "Test Suite", value: "Jest Endpoint Coverage" },
+      { label: "History Layer", value: "Session Query Store" }
+    ],
+    links: {
+      live: "https://astro-agent-wheat.vercel.app",
+      github: "https://github.com/pritish157/AstroAgent"
+    },
+    challenge:
+      "Orchestrating raw LLM API calls with reliable error handling, request validation middleware, session-based context, and rate-aware prompt throttling.",
+    outcome: [
+      "Built a Node.js/Express backend to orchestrate LLM API calls, manage session-based query history, and serve structured responses to the frontend.",
+      "Designed API middleware for request validation, error handling, and rate-aware LLM prompt orchestration; wrote Jest unit tests for endpoint logic."
+    ],
+    architecture: [
+      "Node.js / Express server managing LLM API requests and session memory.",
+      "Custom express middleware stack validating payloads, enforcing rate limits, and catching exceptions.",
+      "Jest test suite providing continuous unit verification for endpoint handlers."
+    ],
+    highlights: [
+      "Custom API middleware for request validation & error handling.",
+      "Session-based history store for multi-turn conversational context.",
+      "Jest unit test suite ensuring endpoint reliability."
     ]
   },
   {
     id: "django-fuel-route",
     title: "Fuel Route Optimisation",
-    eyebrow: "Backend logistics engine",
+    eyebrow: "Backend Logistics Engine",
     summary:
-      "A Python/Django backend service designed to optimize fuel station stops along mapped routes to minimize travel and refueling costs.",
+      "Python/Django REST service calculating cost-optimized refueling stops along geographic routes to minimize total travel and fuel costs.",
     impact:
-      "Demonstrates backend logic complexity, handling geo-spatial routing data, cost analysis, and API design without relying on a GUI.",
+      "Demonstrates complex server-side algorithmic logic, geo-spatial data handling, and clean machine-to-machine API design.",
     accent: "#7C3AED",
     preview: "ops",
-    stack: ["Python", "Django", "PostgreSQL", "Routing Algorithms", "REST API"],
+    stack: ["Python", "Django REST", "PostgreSQL", "Routing Algorithms", "REST API"],
     metrics: [
-      { label: "System type", value: "Headless backend" },
-      { label: "Logic focus", value: "Cost algorithms" },
-      { label: "Framework", value: "Django REST" },
-      { label: "Data structure", value: "Geo-spatial" }
+      { label: "Architecture", value: "Headless REST Engine" },
+      { label: "Algorithm Focus", value: "Cost & Route Optimization" },
+      { label: "Stack", value: "Python / Django" },
+      { label: "Domain", value: "Logistics & GIS" }
     ],
     links: {
       github: "https://github.com/pritish157/Django-backend-fuel-route-optimisation-"
     },
     challenge:
-      "Calculating the most cost-efficient fuel stops requires balancing travel deviations with fuel price differentials across multiple nodes.",
+      "Computing optimal refueling stops considering vehicle tank capacity, fuel consumption rate, and variable station pricing across multi-state routes.",
     outcome: [
       "Engineered an API capable of ingesting route data and returning optimized waypoints.",
       "Handled complex logic around range limits, fuel capacity, and dynamic pricing.",
@@ -314,120 +333,149 @@ export const featuredProjects: Project[] = [
     architecture: [
       "Django REST Framework exposing routing calculation endpoints.",
       "Algorithmic layer evaluating route segments and station costs.",
-      "Data modeling for stations, prices, and vehicle profiles.",
-      "Headless system meant for M2M (machine-to-machine) interaction."
+      "Data modeling for stations, prices, and vehicle profiles."
     ],
     highlights: [
-      "Highlights strong Python and Django capability.",
-      "Proves ability to write complex, logic-heavy headless systems.",
-      "Great talking point for backend-centric or algorithm-focused engineering roles."
+      "Pure algorithmic backend logic in Python/Django.",
+      "Handling geospatial data structures and multi-factor optimization.",
+      "Clean API contract for headless M2M consumption."
     ]
   },
   {
     id: "imagesteg",
     title: "ImageSteg",
-    eyebrow: "Security & Cryptography",
+    eyebrow: "Security & Cryptography Utility",
     summary:
-      "A Python script and utility for hiding hidden data/text inside images using Least Significant Bit (LSB) steganography techniques.",
+      "Python utility embedding encrypted data into image pixels using Least Significant Bit (LSB) steganography techniques.",
     impact:
-      "Provides a raw, low-level demonstration of data manipulation, byte-level processing, and security-oriented problem solving.",
+      "Demonstrates byte-level data manipulation, binary encoding, and cryptography-oriented problem solving.",
     accent: "#C084FC",
     preview: "security",
     stack: ["Python", "Cryptography", "Image Processing", "CLI", "Byte Manipulation"],
     metrics: [
       { label: "Technique", value: "LSB Steganography" },
-      { label: "Platform", value: "Python CLI" },
-      { label: "Focus", value: "Data hiding" },
+      { label: "Interface", value: "Python CLI" },
+      { label: "Data Integrity", value: "Lossless Extraction" },
       { label: "Domain", value: "Security" }
     ],
     links: {
       github: "https://github.com/pritish157/imagesteg."
     },
     challenge:
-      "Altering image pixels to encode data without causing visually detectable artifacts or corrupting the image file structure.",
+      "Encoding secret text payload into pixel channels without generating visual artifacts or compromising image header structures.",
     outcome: [
       "Implemented algorithms that parse and safely modify the Least Significant Bits of pixel arrays.",
       "Ensured data could be both accurately embedded and retrieved losslessly.",
       "Built a functional security utility completely from scratch."
     ],
     architecture: [
-      "Python scripts parsing raw image byte data.",
-      "Encoding module converting text/payloads to binary streams.",
-      "Injection algorithm dispersing bits across RGB channels.",
-      "Extraction module reading bits to rebuild the hidden payload."
+      "Python CLI reading raw byte streams.",
+      "Bit-shifting engine embedding payloads into RGB color channels.",
+      "Lossless decoder restoring exact binary content."
     ],
     highlights: [
-      "Adds a strong security, cryptography, and low-level system capability to the portfolio.",
-      "Proves you can build pure CLI utilities and work with binary data.",
-      "Shows versatility outside of traditional web frameworks."
+      "Byte manipulation and low-level cryptography concepts.",
+      "Lossless data hiding and recovery in Python.",
+      "Independent CLI tool design."
     ]
   }
 ];
 
-export const experienceTimeline: TimelineItem[] = [
+export const workExperiences: WorkExperience[] = [
   {
-    period: "Now",
-    title: "AI-native product interface focus",
-    description:
-      "Leaning hard into premium frontend systems, motion discipline, and product experiences that feel built for the modern AI era."
+    company: "Rooman Technologies Pvt Ltd",
+    location: "Bangalore",
+    role: "Application Developer Intern",
+    period: "Jan 2026 – May 2026",
+    bullets: [
+      "Built and integrated Node.js/Express backend features and React.js UI components end-to-end across the MERN stack within an Agile development team.",
+      "Contributed to REST API development, participated in code reviews, and iterated on features through sprint cycles — prioritising code quality and timely delivery.",
+      "Applied Java/JDBC for database-layer tasks; built working knowledge of HTTP/TCP-IP/DNS fundamentals to support reliable client-server communication in shipped features."
+    ],
+    technologies: ["Node.js", "Express.js", "React.js", "MERN Stack", "Core Java", "JDBC", "Agile"]
   },
   {
-    period: "2024 - 2025",
-    title: "Full-stack product systems",
-    description:
-      "Built realtime communication workflows, event operations tooling, and trust-sensitive platform features across React, Node.js, and MongoDB."
+    company: "Parala Maharaja Engineering College (PMEC)",
+    location: "Berhampur",
+    role: "Web Development Intern",
+    period: "May 2024 – Aug 2024",
+    bullets: [
+      "Integrated REST APIs and managed client-server data flow for dynamic, data-driven institutional web modules, ensuring reliable backend-to-frontend communication.",
+      "Built responsive web interfaces across devices; collaborated with faculty stakeholders to iterate on requirements and deliver working features within deadlines."
+    ],
+    technologies: ["REST APIs", "JavaScript", "HTML5", "CSS3", "Web Modules", "Client-Server Data Flow"]
+  }
+];
+
+export const educationList: Education[] = [
+  {
+    degree: "B.Tech in Computer Science & Engineering",
+    institution: "Parala Maharaja Engineering College (PMEC)",
+    location: "Berhampur, Odisha",
+    period: "2022 – 2026"
+  }
+];
+
+export const certificationList: Certification[] = [
+  {
+    title: "Complete Web Development Bootcamp",
+    issuer: "Udemy"
   },
   {
-    period: "Core foundation",
-    title: "Systems-backed engineering mindset",
-    description:
-      "Grounded in DBMS, networking, operating systems, and data structures so architecture decisions stay practical under product pressure."
+    title: "Web Development Internship Certificate",
+    issuer: "PMEC, Berhampur"
   }
 ];
 
 export const skillGroups: SkillGroup[] = [
   {
-    eyebrow: "Frontend",
-    title: "Interface systems",
-    description: "High-signal UI architecture, motion design, responsive layout systems, and obsessive detail around interaction quality.",
-    items: ["Next.js", "React", "TypeScript", "TailwindCSS", "Framer Motion", "GSAP"]
+    eyebrow: "Languages",
+    title: "Core Programming",
+    description: "Languages used for server logic, database interactions, scripting, and system algorithms.",
+    items: ["JavaScript (ES6+)", "Core Java", "Python", "SQL"]
   },
   {
     eyebrow: "Backend",
-    title: "Workflow engines",
-    description: "Secure APIs, role-aware flows, validation layers, and backend logic that keeps product behavior trustworthy.",
-    items: ["Node.js", "Express", "REST APIs", "JWT Auth", "RBAC", "Middleware"]
-  },
-  {
-    eyebrow: "AI / ML",
-    title: "Applied intelligence",
-    description: "Practical AI-ready thinking focused on product outcomes, retrieval, anomaly signals, and feature-level integration.",
-    items: ["RAG Concepts", "Prompt UX", "Risk Scoring", "Python", "ML Basics", "AI Product Thinking"]
+    title: "Server & API Architecture",
+    description: "Production REST APIs, session/token security, real-time messaging layers, and middleware pipelines.",
+    items: ["Node.js", "Express.js", "REST API Design", "JWT Auth", "TOTP 2FA", "OAuth", "Socket.io", "NodeMailer", "Middleware Architecture"]
   },
   {
     eyebrow: "Databases",
-    title: "State and modeling",
-    description: "Data shapes designed around workflows, relationships, moderation state, and operational reporting.",
-    items: ["MongoDB", "Mongoose", "Schema Design", "Aggregation", "Indexing", "MySQL"]
+    title: "Data Modeling & Storage",
+    description: "Database schema design, indexing strategies, aggregation pipelines, and relational query design.",
+    items: ["MongoDB", "Mongoose ODM", "Schema Design", "Indexing", "Aggregation Pipelines", "Query Optimisation", "MySQL"]
   },
   {
-    eyebrow: "DevOps",
-    title: "Shipping discipline",
-    description: "Deployment-aware engineering with environment boundaries, split hosting, and performance-sensitive delivery decisions.",
-    items: ["Vercel", "Render", "Docker", "Environment Config", "CORS", "Performance"]
+    eyebrow: "Frontend",
+    title: "Client-Side Engineering",
+    description: "Modern component architecture, state management, and responsive interface building.",
+    items: ["React.js", "Next.js", "Redux Toolkit", "HTML5", "CSS3", "Tailwind CSS"]
   },
   {
-    eyebrow: "Tools",
-    title: "Product workflow",
-    description: "The stack around building, debugging, and collaborating on modern product systems with speed and clarity.",
-    items: ["Git", "GitHub", "Postman", "Figma", "VS Code", "Linux CLI"]
+    eyebrow: "Testing",
+    title: "API Verification & Quality",
+    description: "Automated unit and integration testing suites verifying REST endpoint contracts and logic.",
+    items: ["Jest", "Supertest", "REST Endpoint Testing", "Unit Testing", "Integration Testing"]
+  },
+  {
+    eyebrow: "DevOps & Cloud",
+    title: "CI/CD & Deployment",
+    description: "Containerization, automated release pipelines, server hosting, and version control workflows.",
+    items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Docker Compose", "Vercel", "Render", "Linux CLI"]
+  },
+  {
+    eyebrow: "Integrations",
+    title: "Third-Party & Ecosystem",
+    description: "Payment processing, cloud media management, and LLM API orchestrations.",
+    items: ["Razorpay (Orders, Checkout, Verification, Refunds, Webhooks)", "Cloudinary", "ImageKit", "LLM APIs"]
   }
 ];
 
 export const contactReasons = [
-  "Hiring for frontend-heavy product engineering with full-stack ownership.",
-  "Need premium UI craft without sacrificing backend clarity.",
-  "Want an engineer who can explain system tradeoffs as clearly as they ship them."
+  "Hiring for Backend or Full-Stack Developer roles (2026).",
+  "Need a developer with strong REST API architecture, JWT/TOTP security, and MongoDB optimization experience.",
+  "Looking for someone who has shipped production-grade MERN applications with real-time Socket.io and Razorpay integrations."
 ];
 
 export const socialLinks = [
@@ -447,3 +495,4 @@ export const socialLinks = [
     shortLabel: siteConfig.email
   }
 ] as const;
+

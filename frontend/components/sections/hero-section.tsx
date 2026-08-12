@@ -52,10 +52,11 @@ function SystemTerminal() {
     }
 
     const lines = [
-      "> INITIALIZING MERN STACK...",
-      "> LOADING PYTHON ALGORITHMS...",
-      "> SECURING INFRASTRUCTURE...",
-      "> SYSTEM.READY // OPEN FOR IMPACT."
+      "> INITIALIZING NODE.JS / EXPRESS REST SERVER...",
+      "> ENFORCING JWT + TOTP 2FA AUTHENTICATION...",
+      "> OPTIMIZING MONGODB AGGREGATION & INDEXES...",
+      "> CONNECTING SOCKET.IO & RAZORPAY WEBHOOKS...",
+      "> SYSTEM.READY // SEEKING BACKEND / FULL-STACK ROLES."
     ];
     let currentLine = 0;
     let currentChar = 0;
@@ -130,11 +131,11 @@ function SystemTerminal() {
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Core Engine</p>
-            <p className="mt-1.5 text-sm font-semibold text-slate-200">Node.js / Python / React</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">Node.js / Express / MERN</p>
           </div>
           <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Focus Area</p>
-            <p className="mt-1.5 text-sm font-semibold text-slate-200">High-Performance Arch</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">REST APIs & Security</p>
           </div>
         </div>
 
@@ -142,9 +143,9 @@ function SystemTerminal() {
           <div className="flex items-start gap-3.5">
             <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_12px_rgba(167,139,250,0.9)]" />
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-violet-200">Available for Impact</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-violet-200">Available for Opportunities</p>
               <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                Ready to engineer production product systems, AI workflows, and secure backend platforms.
+                Ready to engineer production REST APIs, secure auth systems, and scalable backend platforms.
               </p>
             </div>
           </div>
@@ -196,11 +197,11 @@ export function HeroSection() {
           {/* Primary Headline & Description */}
           <motion.div variants={item} className="mt-7 space-y-5">
             <h1 className="font-display text-[clamp(2.75rem,6vw,5.5rem)] font-bold leading-[0.95] tracking-tight text-white">
-              Building AI-era
+              Engineering secure
               <span className="block bg-gradient-to-r from-white via-violet-200 to-fuchsia-200 bg-clip-text text-transparent">
-                backends with
+                production APIs &
               </span>
-              <span className="block text-slate-300">full-stack gravity.</span>
+              <span className="block text-slate-300">scalable backends.</span>
             </h1>
 
             <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg lg:text-xl font-normal">

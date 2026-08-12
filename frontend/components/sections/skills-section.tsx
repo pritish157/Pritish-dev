@@ -2,7 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { RiBrainLine, RiBracesLine, RiDatabase2Line, RiFlashlightLine, RiLayout4Line, RiRocket2Line } from "react-icons/ri";
+import {
+  RiCodeSSlashLine,
+  RiServerLine,
+  RiDatabase2Line,
+  RiLayout4Line,
+  RiFlaskLine,
+  RiCloudLine,
+  RiPlugLine,
+  RiTerminalBoxLine
+} from "react-icons/ri";
 
 import { SectionReveal } from "@/components/effects/section-reveal";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +19,15 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { skillGroups } from "@/lib/data/portfolio";
 
-const icons = [RiLayout4Line, RiBracesLine, RiBrainLine, RiDatabase2Line, RiRocket2Line, RiFlashlightLine];
+const icons = [
+  RiCodeSSlashLine,
+  RiServerLine,
+  RiDatabase2Line,
+  RiLayout4Line,
+  RiFlaskLine,
+  RiCloudLine,
+  RiPlugLine
+];
 
 export default function SkillsSection() {
   const reduceMotion = useReducedMotion();
@@ -36,15 +53,15 @@ export default function SkillsSection() {
       <div className="mx-auto max-w-7xl">
         <SectionReveal>
           <SectionHeading
-            eyebrow="Experience stack"
-            title="The delivery stack behind the interface work."
-            description="This section stays grouped under experience so mobile visitors can review capability depth without getting pushed into another long navigation branch."
+            eyebrow="Technical Stack & Skills"
+            title="Production tools and backend capabilities."
+            description="Categorized engineering skills from REST API design to database query optimization, testing, containerization, and third-party integrations."
           />
         </SectionReveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {skillGroups.map((group, index) => {
-            const Icon = icons[index];
+            const Icon = icons[index] || RiTerminalBoxLine;
 
             return (
               <SectionReveal key={group.title} delay={index * 0.05}>
@@ -82,3 +99,4 @@ export default function SkillsSection() {
     </section>
   );
 }
+
