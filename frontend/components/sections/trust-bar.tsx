@@ -2,7 +2,6 @@
 
 import {
   RiCodeSSlashLine,
-  RiCpuLine,
   RiDatabase2Line,
   RiDatabaseLine,
   RiDownloadLine,
@@ -16,8 +15,7 @@ import {
   RiSparklingLine,
   RiStackLine,
   RiTailwindCssLine,
-  RiTerminalBoxLine,
-  RiCommandLine
+  RiTerminalBoxLine
 } from "react-icons/ri";
 
 import { SectionReveal } from "@/components/effects/section-reveal";
@@ -29,22 +27,24 @@ import { MetricCard } from "@/components/ui/metric-card";
 import { credibilityMetrics, siteConfig } from "@/lib/data/portfolio";
 
 const techStackItems: MarqueeItem[] = [
-  { label: "React 19", icon: RiReactjsLine },
-  { label: "Next.js 15", icon: RiNextjsLine },
-  { label: "TypeScript", icon: RiCodeSSlashLine },
+  { label: "Java 21", icon: RiTerminalBoxLine },
+  { label: "Spring Boot", icon: RiServerLine },
+  { label: "Spring Security", icon: RiShieldKeyholeLine },
+  { label: "MySQL", icon: RiDatabaseLine },
+  { label: "Hibernate / JPA", icon: RiDatabase2Line },
   { label: "Node.js", icon: RiNodejsLine },
   { label: "Express.js", icon: RiServerLine },
+  { label: "REST APIs", icon: RiTerminalBoxLine },
   { label: "MongoDB", icon: RiDatabase2Line },
-  { label: "PostgreSQL", icon: RiDatabaseLine },
-  { label: "Python", icon: RiCommandLine },
+  { label: "TypeScript", icon: RiCodeSSlashLine },
+  { label: "React 19", icon: RiReactjsLine },
+  { label: "Next.js 15", icon: RiNextjsLine },
   { label: "Docker", icon: RiStackLine },
   { label: "Git", icon: RiGitBranchLine },
-  { label: "GitHub", icon: RiGithubFill },
-  { label: "REST APIs", icon: RiTerminalBoxLine },
-  { label: "JWT Auth", icon: RiShieldKeyholeLine },
+  { label: "GitHub Actions", icon: RiGithubFill },
+  { label: "JWT + TOTP", icon: RiShieldKeyholeLine },
   { label: "Socket.IO", icon: RiSparklingLine },
-  { label: "Tailwind CSS", icon: RiTailwindCssLine },
-  { label: "Framer Motion", icon: RiCpuLine }
+  { label: "Tailwind CSS", icon: RiTailwindCssLine }
 ];
 
 export function TrustBar() {

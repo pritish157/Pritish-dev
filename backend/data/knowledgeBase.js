@@ -14,6 +14,11 @@ const knowledge = [
     keywords: ['goal', 'career', 'job', 'role', 'target', 'looking', 'opportunity', 'hire', 'work'],
     reply: `Pritish's career goal is to work as an Application Developer in backend-heavy full-stack roles — owning features from database schema design to deployed UI. He targets companies where he can ship real systems with Node.js, Express, and MongoDB, ideally with real-time or AI-integrated components.`,
   },
+  // ── PAYGUARD PAYMENT SWITCH ──
+  {
+    keywords: ['payguard', 'payment', 'switch', 'java', 'spring', 'transaction', 'reversal', 'idempotency', 'iso-8583', 'optimistic locking', 'dispute'],
+    reply: `"PayGuard" is a resilient payment switching engine and transaction investigation system built with Java 21, Spring Boot 4.x, and MySQL. It features: atomic dual-account fund transfers (@Transactional), ISO-8583 standard response codes (00 Success, 14 Invalid Account, 51 Insufficient Funds, 57 Blocked), database-enforced @Version optimistic locking preventing race conditions and double-debits, database-safe idempotency via unique constraints, real-time fraud & velocity rules, in-memory sliding-window rate limiting, JPA Specification multi-criteria search, dispute lifecycle management, and 34 comprehensive automated tests.`,
+  },
   // ── MATRIMONIAL APP ──
   {
     keywords: ['matrimonial', 'knot', 'love', 'match', 'wedding', 'marriage', 'matching'],
@@ -21,8 +26,8 @@ const knowledge = [
   },
   // ── EVENT MANAGEMENT ──
   {
-    keywords: ['event', 'management', 'ticket', 'booking', 'registration', 'organizer'],
-    reply: `The Event Management System is a MERN app with role-based access for Admins, Organizers, and Attendees. Key features: JWT authentication with role-based control, event creation with capacity limits and deadlines, one-click registration with Nodemailer email confirmation, admin dashboard with CRUD and attendee list, and search/filter by category and date. It has 18+ API endpoints and 5 MongoDB collections.`,
+    keywords: ['event', 'management', 'ticket', 'booking', 'registration', 'organizer', 'vireon'],
+    reply: `The Event Management System (Vireon) is a MERN app with role-based access for Admins, Organizers, and Attendees. Key features: JWT authentication with role-based control, event creation with capacity limits and deadlines, one-click registration with Nodemailer email confirmation, Razorpay payment processing with webhooks, two-stage concurrency seat lock, and search/filter by category and date. It has 10+ REST endpoints and full lifecycle payments.`,
   },
   // ── STEGANOGRAPHY ──
   {
@@ -36,33 +41,33 @@ const knowledge = [
   },
   // ── AUTHENTICATION ──
   {
-    keywords: ['auth', 'authentication', 'jwt', 'login', 'security', 'password', 'token', 'bcrypt', 'session'],
-    reply: `Pritish has strong experience with authentication systems: JWT access and refresh tokens, bcrypt password hashing, role-based access control (Admin/User roles), email verification flows, password reset with secure tokens, rate limiting, and session management. He has also implemented all-device logout via JWT token versioning.`,
+    keywords: ['auth', 'authentication', 'jwt', 'login', 'security', 'password', 'token', 'bcrypt', 'session', 'rbac'],
+    reply: `Pritish has strong experience with authentication systems: stateless Spring Security 6.x JWT and Node.js JWT access/refresh tokens, TOTP 2FA time-based OTP validation, BCrypt password hashing, role-based access control (ADMIN, OPERATOR, AUDITOR), rate limiting, and session management.`,
   },
   // ── TECH STACK ──
   {
-    keywords: ['stack', 'tech', 'technology', 'tools', 'language', 'use', 'know', 'skill'],
-    reply: `Pritish's core stack is MERN: MongoDB, Express.js, React (Vite), Node.js. Additional skills include: Socket.IO, JWT, Nodemailer, Firebase FCM, Multer (file uploads), Tailwind CSS, Framer Motion, Axios, and Git/GitHub. He also knows Java and Python, and is learning TypeScript, Docker, and Redis.`,
+    keywords: ['stack', 'tech', 'technology', 'tools', 'language', 'use', 'know', 'skill', 'java', 'spring'],
+    reply: `Pritish is skilled across Java & MERN backend ecosystems: Java 21, Spring Boot 4.x, Spring Security, Spring Data JPA, Hibernate, MySQL, Node.js, Express.js, MongoDB, React, and TypeScript. Core specializations include REST API design, ISO-8583 standards, @Version optimistic locking, idempotency control, JWT/TOTP 2FA security, Socket.io, Docker, and GitHub Actions CI/CD.`,
   },
-  // ── MONGODB ──
+  // ── MONGODB & MYSQL ──
   {
-    keywords: ['mongodb', 'database', 'mongoose', 'atlas', 'nosql', 'schema', 'model'],
-    reply: `Pritish works with MongoDB and Mongoose for database design. He designs schemas for complex relationships — users, matches, messages, events, and tickets. He uses MongoDB Atlas for production deployments and has experience with indexing, aggregation, and population of references.`,
+    keywords: ['mongodb', 'database', 'mongoose', 'atlas', 'nosql', 'schema', 'model', 'mysql', 'sql', 'hibernate'],
+    reply: `Pritish works with both SQL (MySQL, Hibernate ORM, optimistic locking with @Version, indexing) and NoSQL (MongoDB, Mongoose ODM, aggregation pipelines, query optimization) databases for high-integrity transaction processing and scalable document storage.`,
   },
   // ── DEPLOYMENT ──
   {
     keywords: ['deploy', 'deployment', 'production', 'render', 'vercel', 'hosting', 'live', 'deployed'],
-    reply: `Pritish has deployed full-stack apps to production: Node/Express backends on Render, React frontends on Vercel. He handles environment variable configuration, CORS hardening for cross-origin production requests, and has experience troubleshooting WebSocket connections in deployed environments.`,
+    reply: `Pritish has deployed full-stack apps to production: Java/Spring Boot & Node/Express backends on Render, React/Next.js frontends on Vercel. He handles environment variable configuration, CORS hardening, Docker containerization, and GitHub Actions CI/CD automation.`,
   },
   // ── AI ──
   {
     keywords: ['ai', 'artificial intelligence', 'openai', 'gpt', 'llm', 'rag', 'chatbot', 'machine learning', 'ml'],
-    reply: `Pritish is actively exploring AI integration in web apps. He has built a RAG-based assistant (this chatbot!) and understands how to connect LLM APIs like OpenAI into MERN applications. He's also studied ML basics and built a Rainfall Prediction model using Python. His current learning path includes LangChain and vector databases for production RAG systems.`,
+    reply: `Pritish is actively exploring AI integration in web apps. He has built a RAG-based assistant (this chatbot!) and AstroAgent (LLM API orchestration with prompt middleware and Jest tests).`,
   },
   // ── PROJECTS COUNT ──
   {
     keywords: ['project', 'built', 'created', 'made', 'work', 'portfolio'],
-    reply: `Pritish has built 3 major systems: (1) Event Management System — MERN with role-based auth and email notifications; (2) Knot of Love — matrimonial platform with real-time chat, KYC, push notifications, and full deployment; (3) Image Steganography System — client-side LSB encoding for hiding data in images. He also built a Rainfall Prediction ML model in Python.`,
+    reply: `Pritish has built 4 major systems: (1) PayGuard — Java 21 / Spring Boot payment switch with ISO-8583 codes, @Version locking, and fraud checks; (2) Knot of Love — matrimonial platform with real-time Socket.io chat, TOTP 2FA, and full CI/CD; (3) Vireon — event management with Razorpay payment processing and concurrent seat lock; (4) AstroAgent — LLM API orchestration backend. He also created Image Steganography and Fuel Route Optimization systems.`,
   },
   // ── NODEMAILER / EMAIL ──
   {

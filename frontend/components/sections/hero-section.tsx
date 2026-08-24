@@ -52,11 +52,11 @@ function SystemTerminal() {
     }
 
     const lines = [
-      "> INITIALIZING NODE.JS / EXPRESS REST SERVER...",
-      "> ENFORCING JWT + TOTP 2FA AUTHENTICATION...",
-      "> OPTIMIZING MONGODB AGGREGATION & INDEXES...",
-      "> CONNECTING SOCKET.IO & RAZORPAY WEBHOOKS...",
-      "> SYSTEM.READY // SEEKING BACKEND / FULL-STACK ROLES."
+      "> INITIALIZING JAVA 21 / SPRING BOOT SWITCH ENGINE...",
+      "> ENFORCING @VERSION OPTIMISTIC LOCK & IDEMPOTENCY...",
+      "> VALIDATING ISO-8583 CODES & FRAUD VELOCITY RULES...",
+      "> ORCHESTRATING NODE.JS REST APIS & SOCKET.IO...",
+      "> SYSTEM.READY // SEEKING BACKEND / SOFTWARE ENGINEER ROLES."
     ];
     let currentLine = 0;
     let currentChar = 0;
@@ -131,11 +131,11 @@ function SystemTerminal() {
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Core Engine</p>
-            <p className="mt-1.5 text-sm font-semibold text-slate-200">Node.js / Express / MERN</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">Java / Spring Boot & Node.js</p>
           </div>
           <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.02] p-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-slate-400">Focus Area</p>
-            <p className="mt-1.5 text-sm font-semibold text-slate-200">REST APIs & Security</p>
+            <p className="mt-1.5 text-sm font-semibold text-slate-200">Payment Switches & REST APIs</p>
           </div>
         </div>
 

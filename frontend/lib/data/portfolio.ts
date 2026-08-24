@@ -23,7 +23,7 @@ export type Project = {
   summary: string;
   impact: string;
   accent: string;
-  preview: "chat" | "events" | "security" | "ops" | "agent";
+  preview: "chat" | "events" | "security" | "ops" | "agent" | "payment";
   stack: string[];
   metrics: Metric[];
   links: {
@@ -67,12 +67,12 @@ export type SkillGroup = {
 export const siteConfig = {
   name: "Pritish Kumar Panda",
   shortName: "Pritish.dev",
-  role: "Backend Developer · MERN Stack Engineer",
-  headline: "Designing & shipping production-grade REST APIs, secure auth & real-time systems.",
+  role: "Backend Developer · Java & MERN Engineer",
+  headline: "Designing & shipping production-grade REST APIs, payment switches & distributed systems.",
   subheadline:
-    "B.Tech CSE (2026) graduate specialized in Node.js/Express REST API design, secure JWT + TOTP 2FA authentication, MongoDB query optimization, Socket.io real-time systems, and payment gateway integration.",
+    "B.Tech CSE (2026) graduate specialized in Java 21 / Spring Boot payment switching architectures, Node.js/Express REST APIs, concurrency control, database-safe idempotency, and secure authentication.",
   description:
-    "Official engineering portfolio of Pritish Kumar Panda — Backend-focused Full-Stack Developer skilled in Node.js, Express.js, MongoDB, REST API Architecture, TOTP 2FA, Razorpay, Docker, and CI/CD.",
+    "Official engineering portfolio of Pritish Kumar Panda — Backend Developer skilled in Java 21, Spring Boot, Spring Security, MySQL/Hibernate, Node.js, Express.js, MongoDB, REST API Architecture, TOTP 2FA, Docker, and CI/CD.",
   email: "pritishpanda157@gmail.com",
   phone: "+91-6372591970",
   location: "India",
@@ -114,6 +114,13 @@ export const quickAccessLinks: ExternalLink[] = [
     category: "profile"
   },
   {
+    label: "PayGuard",
+    href: "https://github.com/pritish157/PayGuard",
+    shortLabel: "Payment Switch Engine",
+    description: "Java 21 / Spring Boot switch with ISO-8583 codes, @Version locking, and fraud checks.",
+    category: "project"
+  },
+  {
     label: "Knot of Love",
     href: "https://knot-of-love.vercel.app",
     shortLabel: "Matrimonial Platform",
@@ -137,50 +144,97 @@ export const quickAccessLinks: ExternalLink[] = [
 ];
 
 export const heroSignals = [
-  "Production-grade Node.js / Express REST API Design",
-  "Secure Auth: JWT Session Management + TOTP 2FA",
-  "MongoDB Aggregations, Indexing & Query Optimisation",
-  "Realtime Systems with Socket.io & Payment Gates (Razorpay)"
+  "Java 21 / Spring Boot Payment Switching & Transaction Engineering",
+  "Concurrency Protection: @Version Optimistic Locking & Idempotency",
+  "Production-grade Node.js / Express REST API Architecture",
+  "Secure Auth: Spring Security RBAC + JWT Session Management + TOTP 2FA"
 ];
 
 export const credibilityMetrics: Metric[] = [
-  { label: "REST Endpoints Shipped", value: "58+" },
-  { label: "MERN Stack Systems", value: "03" },
+  { label: "REST Endpoints Shipped", value: "70+" },
+  { label: "Backend Flagship Systems", value: "04" },
   { label: "Industry Internships", value: "02" },
   { label: "B.Tech CSE Degree", value: "2026" }
 ];
 
 export const trustPills = [
+  "Java 21",
+  "Spring Boot",
+  "Spring Security",
+  "Spring Data JPA",
+  "MySQL",
+  "Hibernate",
   "Node.js",
   "Express.js",
   "REST API Design",
   "MongoDB",
   "JWT + TOTP 2FA",
   "Socket.io",
-  "Razorpay",
-  "React.js",
-  "Next.js",
   "Docker",
   "GitHub Actions",
-  "Jest / Supertest"
+  "JUnit / Test"
 ];
 
 export const credibilityNotes = [
   {
-    title: "GitHub-Verified Code",
-    detail: "Production repos with 40+ REST endpoints, CI/CD pipelines, and clean architecture."
+    title: "GitHub-Verified Production Systems",
+    detail: "Production-grade codebases featuring resilient payment switches, 70+ REST endpoints, CI/CD pipelines, and clean architecture."
   },
   {
-    title: "Backend-First Rigor",
-    detail: "Deep expertise in REST API design, query optimization, security middleware, and auth flows."
+    title: "Backend-First Concurrency & Rigor",
+    detail: "Deep expertise in transactional integrity, @Version optimistic locking, ISO-8583 standard codes, database indexing, and auth flows."
   },
   {
-    title: "Full-Stack Capability",
-    detail: "MERN stack proficiency with responsive React/Next.js frontends connected to robust Node servers."
+    title: "Polyglot Architecture",
+    detail: "Proven capability building high-throughput Java / Spring Boot services and scalable Node.js/MERN real-time applications."
   }
 ] as const;
 
 export const featuredProjects: Project[] = [
+  {
+    id: "payguard",
+    title: "PayGuard",
+    eyebrow: "Payment Switch & Investigation Engine",
+    summary:
+      "Resilient, high-throughput payment switch built with Java 21 and Spring Boot 4.x, featuring atomic dual-account fund transfers, ISO-8583 response codes, database-enforced idempotency, and automated fraud/velocity rules.",
+    impact:
+      "Engineered database-enforced @Version optimistic locking on Account and PaymentTransaction entities to eliminate race conditions and double-spending, built dynamic JPA Specification transaction investigations, and established an immutable event audit trail.",
+    accent: "#10B981",
+    preview: "payment",
+    stack: ["Java 21", "Spring Boot", "Spring Security", "Spring Data JPA", "MySQL", "Hibernate", "JWT", "Swagger / OpenAPI", "Maven"],
+    metrics: [
+      { label: "Core Switch", value: "Java 21 / Spring Boot" },
+      { label: "Standard Codes", value: "ISO-8583 Compliant" },
+      { label: "Concurrency Control", value: "@Version Optimistic Lock" },
+      { label: "Automated Tests", value: "34 Concurrency & Unit Tests" }
+    ],
+    links: {
+      github: "https://github.com/pritish157/PayGuard"
+    },
+    challenge:
+      "Designing an electronic fund transfer switch that guarantees atomic balance consistency under concurrent traffic, prevents duplicate charge execution during network timeouts/retries, and enforces real-time fraud thresholds without degrading throughput.",
+    outcome: [
+      "Architected atomic dual-account fund transfers with @Transactional integrity, generating System Trace Audit Numbers (STAN) and standard ISO-8583 response codes (00 Success, 14 Invalid Account, 51 Insufficient Funds, 57 Blocked).",
+      "Enforced database-level optimistic concurrency control via @Version on Account and PaymentTransaction entities to prevent simultaneous double-debits.",
+      "Implemented database-safe idempotency via unique constraints on idempotency_key with automatic collision recovery and original response replay.",
+      "Engineered a multi-rule fraud and velocity engine (amount limit > ₹50,000, 5 attempts/min velocity cap, frozen account blocking) and an in-memory sliding window rate limiter (20 req/min).",
+      "Built dynamic multi-criteria transaction investigation via JPA Specifications and an immutable chronological audit trail tracking all payment lifecycle milestones.",
+      "Wrote 34 automated unit, integration, concurrency, and security test cases verifying double-spending prevention and reversal integrity."
+    ],
+    architecture: [
+      "Spring Boot 4.x REST API layer with SpringDoc OpenAPI 3.0 documentation and JWT-authenticated endpoints.",
+      "Spring Security 6.x stateless filter chain with BCrypt password hashing and role-based access control (ADMIN, OPERATOR, AUDITOR).",
+      "Transaction processing service with @Transactional boundary management, STAN generator, and ISO-8583 mapping.",
+      "Optimistic locking (@Version) and unique idempotency keys in MySQL 8.0 / Hibernate ORM preventing duplicate charges.",
+      "In-memory sliding window rate limiter filter backed by ConcurrentHashMap to throttle abusive traffic.",
+      "Event-driven TransactionAudit entity pipeline logging immutable chronological state transitions."
+    ],
+    highlights: [
+      "Production-ready payment switch with ISO-8583 standard response codes and STAN generation.",
+      "Database-level optimistic locking and idempotency protection against double-spending and network retries.",
+      "Multi-criteria JPA Specification transaction investigation and 34 automated concurrency/fraud tests."
+    ]
+  },
   {
     id: "knot-of-love",
     title: "Knot of Love",
@@ -431,51 +485,99 @@ export const skillGroups: SkillGroup[] = [
   {
     eyebrow: "Languages",
     title: "Core Programming",
-    description: "Languages used for server logic, database interactions, scripting, and system algorithms.",
-    items: ["JavaScript (ES6+)", "Core Java", "Python", "SQL"]
+    description: "Languages used for server logic, database interactions, concurrency control, and system algorithms.",
+    items: ["Java 21 / Core Java", "JavaScript (ES6+)", "Python", "SQL"]
   },
   {
-    eyebrow: "Backend",
-    title: "Server & API Architecture",
-    description: "Production REST APIs, session/token security, real-time messaging layers, and middleware pipelines.",
-    items: ["Node.js", "Express.js", "REST API Design", "JWT Auth", "TOTP 2FA", "OAuth", "Socket.io", "NodeMailer", "Middleware Architecture"]
+    eyebrow: "Backend Frameworks",
+    title: "Server & Switch Architecture",
+    description: "Enterprise payment switching, production REST APIs, session/token security, and middleware pipelines.",
+    items: [
+      "Spring Boot",
+      "Spring MVC",
+      "Spring Security",
+      "Spring Data JPA",
+      "Node.js",
+      "Express.js",
+      "REST API Design",
+      "JWT Auth",
+      "TOTP 2FA",
+      "Socket.io",
+      "Sliding-Window Rate Limiting"
+    ]
   },
   {
-    eyebrow: "Databases",
+    eyebrow: "Databases & ORM",
     title: "Data Modeling & Storage",
-    description: "Database schema design, indexing strategies, aggregation pipelines, and relational query design.",
-    items: ["MongoDB", "Mongoose ODM", "Schema Design", "Indexing", "Aggregation Pipelines", "Query Optimisation", "MySQL"]
+    description: "Database schema design, indexing strategies, optimistic concurrency locking, and aggregation pipelines.",
+    items: [
+      "MySQL",
+      "Hibernate ORM",
+      "MongoDB",
+      "Mongoose ODM",
+      "Schema Design",
+      "Indexing Strategies",
+      "@Version Optimistic Locking",
+      "Aggregation Pipelines",
+      "Query Optimisation"
+    ]
   },
   {
-    eyebrow: "Frontend",
-    title: "Client-Side Engineering",
-    description: "Modern component architecture, state management, and responsive interface building.",
-    items: ["React.js", "Next.js", "Redux Toolkit", "HTML5", "CSS3", "Tailwind CSS"]
+    eyebrow: "Systems & Standards",
+    title: "Transactional Engineering",
+    description: "Financial switch mechanisms, payment reversals, idempotency keys, and role-based access control.",
+    items: [
+      "ISO-8583 Response Codes",
+      "Idempotency Controls",
+      "Payment Reversals",
+      "STAN Generation",
+      "JPA Specifications",
+      "Role-Based Access Control (RBAC)",
+      "Immutable Audit Trails"
+    ]
   },
   {
-    eyebrow: "Testing",
-    title: "API Verification & Quality",
-    description: "Automated unit and integration testing suites verifying REST endpoint contracts and logic.",
-    items: ["Jest", "Supertest", "REST Endpoint Testing", "Unit Testing", "Integration Testing"]
+    eyebrow: "Testing & Quality",
+    title: "Verification & Test Suites",
+    description: "Automated unit, integration, concurrency, and security testing verifying contracts and double-spend protection.",
+    items: [
+      "JUnit / Spring Boot Test",
+      "Jest",
+      "Supertest",
+      "Concurrency & Race Condition Testing",
+      "Security Endpoint Testing",
+      "Integration Testing"
+    ]
   },
   {
     eyebrow: "DevOps & Cloud",
     title: "CI/CD & Deployment",
-    description: "Containerization, automated release pipelines, server hosting, and version control workflows.",
-    items: ["Git", "GitHub", "GitHub Actions (CI/CD)", "Docker", "Docker Compose", "Vercel", "Render", "Linux CLI"]
+    description: "Containerization, automated release pipelines, server hosting, and API specification tooling.",
+    items: [
+      "Git",
+      "GitHub",
+      "GitHub Actions (CI/CD)",
+      "Docker",
+      "Docker Compose",
+      "Maven",
+      "Swagger / OpenAPI 3.0",
+      "Vercel",
+      "Render",
+      "Linux CLI"
+    ]
   },
   {
     eyebrow: "Integrations",
     title: "Third-Party & Ecosystem",
-    description: "Payment processing, cloud media management, and LLM API orchestrations.",
-    items: ["Razorpay (Orders, Checkout, Verification, Refunds, Webhooks)", "Cloudinary", "ImageKit", "LLM APIs"]
+    description: "Payment processing gateways, cloud media management, and LLM API orchestrations.",
+    items: ["Razorpay (Orders, Webhooks, Refunds)", "Cloudinary", "ImageKit", "LLM APIs", "NodeMailer"]
   }
 ];
 
 export const contactReasons = [
-  "Hiring for Backend or Full-Stack Developer roles (2026).",
-  "Need a developer with strong REST API architecture, JWT/TOTP security, and MongoDB optimization experience.",
-  "Looking for someone who has shipped production-grade MERN applications with real-time Socket.io and Razorpay integrations."
+  "Hiring for Backend Developer or Software Engineer roles (Java / Spring Boot / Node.js).",
+  "Need an engineer with hands-on experience in payment switches, concurrency control, ISO-8583 standards, and REST API architecture.",
+  "Looking for someone who has shipped production-grade code with database-level idempotency, JWT/TOTP security, and automated test coverage."
 ];
 
 export const socialLinks = [

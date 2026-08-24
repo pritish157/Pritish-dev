@@ -129,9 +129,10 @@ Five production projects demonstrate engineering capability across different dom
 
 | Project | Domain | Key Signal |
 |---|---|---|
-| Aradhana AstroAgent | Agentic AI | State machines, LangGraph, SSE streaming, astronomical calculations |
+| PayGuard | Financial Switch | Java 21, Spring Boot, ISO-8583, @Version optimistic locking, idempotency, fraud rules |
 | Knot of Love | Realtime Platform | Socket.IO, KYC verification, moderation workflows, trust systems |
-| Vireon | Event Management | Role-based access, transactional email, registration lifecycle |
+| Vireon | Event Management | Role-based access, transactional email, Razorpay lifecycle, concurrency lock |
+| AstroAgent | Conversational AI | LLM API orchestration, prompt middleware, Jest test suite |
 | Fuel Route Optimisation | Backend Algorithms | Headless Django API, geo-spatial routing, cost optimization |
 | ImageSteg | Security & Cryptography | LSB steganography, byte-level processing, Python CLI |
 

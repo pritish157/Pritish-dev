@@ -19,6 +19,21 @@ const portfolioDocuments = [
     ],
   },
   {
+    id: 'payguard',
+    title: 'PayGuard Payment Switch',
+    category: 'Project',
+    anchor: '/#projects',
+    keywords: ['payguard', 'payment switch', 'java', 'spring boot', 'iso 8583', 'idempotency', 'optimistic locking', 'reversal', 'dispute', 'fraud'],
+    summary:
+      'PayGuard is a resilient, high-throughput Payment Switch and Transaction Investigation System built with Java 21 and Spring Boot 4.x.',
+    details: [
+      'It processes atomic dual-account fund transfers (@Transactional) with standard ISO-8583 response codes and STAN generation.',
+      'Enforces database-level @Version optimistic locking on Account and PaymentTransaction entities to prevent race conditions and double-debits.',
+      'Features database-safe idempotency via unique constraints on idempotency_key, real-time fraud/velocity rules, in-memory sliding-window rate limiting, and 34 automated concurrency/unit tests.',
+      'Includes JPA Specification multi-criteria transaction investigation, dispute lifecycle management, and an immutable chronological audit trail.',
+    ],
+  },
+  {
     id: 'knot-of-love',
     title: 'Knot of Love',
     category: 'Project',

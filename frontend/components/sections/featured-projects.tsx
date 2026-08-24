@@ -11,7 +11,8 @@ import {
   RiRadarLine,
   RiSparklingLine,
   RiTerminalBoxLine,
-  RiKeynoteLine
+  RiKeynoteLine,
+  RiExchangeDollarLine
 } from "react-icons/ri";
 
 import { SectionReveal } from "@/components/effects/section-reveal";
@@ -22,6 +23,120 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 import { featuredProjects, type Project } from "@/lib/data/portfolio";
 import { cn } from "@/lib/utils";
+
+function PaymentPreviewSurface() {
+  const [activeStage, setActiveStage] = useState(0);
+
+  const stages = [
+    {
+      id: "INGRESS",
+      tag: "1. Ingress & Idempotency",
+      label: "POST /api/payments",
+      detail: "ACC1001 → ACC2002 · ₹2,500.00 · Key: PAY-2026-081",
+      status: "VERIFIED"
+    },
+    {
+      id: "FRAUD",
+      tag: "2. Fraud & Velocity Engine",
+      label: "Rule Evaluation",
+      detail: "Amount < ₹50k [PASS] · Rate < 5/min [PASS] · Status: ACTIVE",
+      status: "APPROVED"
+    },
+    {
+      id: "CONCURRENCY",
+      tag: "3. @Version Optimistic Lock",
+      label: "Atomic Balance Transition",
+      detail: "Account @Version: 3 → 4 · Double-debit race condition isolated",
+      status: "COMMITTED"
+    },
+    {
+      id: "SETTLE",
+      tag: "4. Audit & ISO-8583",
+      label: "STAN: 100042 · ISO: 00 SUCCESS",
+      detail: "TransactionAudit: PAYMENT_SUCCESS recorded · Reversal eligible",
+      status: "SETTLED"
+    }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStage((prev) => (prev + 1) % 4);
+    }, 2400);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const current = stages[activeStage];
+
+  return (
+    <div className="relative h-64 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#060D12] p-4 sm:p-5 font-mono shadow-[0_0_30px_rgba(16,185,129,0.06)]">
+      {/* Header telemetry badge */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)] animate-pulse" />
+          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-300">
+            Spring Boot Switch // Java 21
+          </span>
+        </div>
+        <div className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-200 backdrop-blur-md">
+          ISO-8583: 00
+        </div>
+      </div>
+
+      {/* Progress pipeline visualizer */}
+      <div className="mt-4 grid grid-cols-4 gap-1.5">
+        {stages.map((stage, idx) => (
+          <div
+            key={stage.id}
+            className={cn(
+              "rounded-lg border px-2 py-1.5 text-center transition-all duration-500",
+              activeStage === idx
+                ? "border-emerald-500/60 bg-emerald-500/20 text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                : activeStage > idx
+                ? "border-emerald-500/20 bg-emerald-500/5 text-emerald-400/80"
+                : "border-white/5 bg-white/[0.02] text-slate-600"
+            )}
+          >
+            <div className="text-[9px] font-bold">{stage.id}</div>
+            <div className="text-[7.5px] opacity-75">{activeStage >= idx ? "✓ DONE" : "PENDING"}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Active Stage Box */}
+      <div className="mt-3.5 rounded-xl border border-emerald-500/20 bg-emerald-950/20 p-3.5 backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+            {current.tag}
+          </div>
+          <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-bold text-emerald-200">
+            {current.status}
+          </span>
+        </div>
+        <div className="mt-1 text-[11px] font-semibold text-slate-200">
+          {current.label}
+        </div>
+        <div className="mt-1 text-[10px] leading-relaxed text-emerald-200/80">
+          {current.detail}
+        </div>
+      </div>
+
+      {/* Footer telemetry */}
+      <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-[9.5px] text-slate-400">
+        <div className="flex items-center gap-1.5">
+          <span className="text-slate-500">STAN</span>
+          <span className="text-emerald-300 font-semibold">100042</span>
+          <span className="text-slate-600">•</span>
+          <span className="text-slate-500">TXN</span>
+          <span className="text-slate-300">TXN-2026-9B2F</span>
+        </div>
+        <div className="flex items-center gap-1 text-emerald-400">
+          <span>@Version Lock: OK</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AgentPreviewSurface() {
   const [step, setStep] = useState(0);
@@ -141,6 +256,10 @@ function AgentPreviewSurface() {
 
 function PreviewSurface({ project }: { project: Project }) {
   const accentStyle = { boxShadow: `0 0 0 1px ${project.accent}22, inset 0 0 0 1px rgba(255,255,255,0.04)` };
+
+  if (project.preview === "payment") {
+    return <PaymentPreviewSurface />;
+  }
 
   if (project.preview === "agent") {
     return <AgentPreviewSurface />;
@@ -409,7 +528,9 @@ export default function FeaturedProjects() {
                           <h3 className="mt-3 font-display text-3xl tracking-[-0.05em] text-white">{currentProject.title}</h3>
                         </div>
                         <div className="rounded-full border border-white/10 bg-white/[0.05] p-3.5">
-                          {currentProject.preview === "chat" || currentProject.preview === "agent" ? (
+                          {currentProject.preview === "payment" ? (
+                            <RiExchangeDollarLine className="h-6 w-6 text-emerald-300" />
+                          ) : currentProject.preview === "chat" || currentProject.preview === "agent" ? (
                             <RiSparklingLine className="h-6 w-6 text-violet-200" />
                           ) : currentProject.preview === "events" ? (
                             <RiCalendarScheduleLine className="h-6 w-6 text-fuchsia-200" />

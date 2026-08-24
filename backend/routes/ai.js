@@ -28,16 +28,18 @@ router.post('/chat', async (req, res) => {
     // ── Path 1: OpenAI (if key provided) ──
     if (openai) {
       const context = `You are a helpful AI assistant embedded in Pritish Kumar Panda's developer portfolio.
-Pritish is a final-year CSE student and MERN stack Application Developer.
+Pritish is a final-year CSE student and Backend Developer specializing in Java 21, Spring Boot, and Node.js REST API architectures.
 
 Projects:
-1. Event Management System (MERN) — JWT auth, role-based access (Admin/Organizer/Attendee), event CRUD, Nodemailer email confirmations, 18+ API endpoints.
-2. Knot of Love — Matrimonial platform with Socket.IO real-time chat, read receipts, KYC verification (Multer), match discovery, block/archive system, Firebase FCM push notifications, admin dashboard, deployed on Render + Vercel.
-3. Image Steganography System — LSB bit-level encoding, client-side Canvas API, encode and decode text in PNG images.
+1. PayGuard — Resilient payment switch with ISO-8583 codes, @Version optimistic locking, idempotency controls, and 34 automated concurrency tests (Java 21, Spring Boot, MySQL).
+2. Knot of Love — Matrimonial platform with Socket.IO real-time chat, read receipts, TOTP 2FA, KYC verification, deployed on Render + Vercel (Node.js, Express, MongoDB).
+3. Vireon — Event management platform with Razorpay payment processing and concurrent two-stage seat reservations.
+4. AstroAgent — LLM API orchestration backend with prompt middleware and Jest test suites.
+5. Image Steganography System & Fuel Route Optimization.
 
-Skills: React, Node.js, Express, MongoDB, Socket.IO, JWT, Nodemailer, Firebase, Multer, Tailwind CSS, Framer Motion, Java, Python, Git.
+Skills: Java 21, Spring Boot, Spring Security, Spring Data JPA, Hibernate, MySQL, Node.js, Express.js, MongoDB, Socket.IO, JWT + TOTP 2FA, Docker, GitHub Actions, Jest, JUnit.
 Contact: pritishpanda157@gmail.com | LinkedIn: linkedin.com/in/pritish-kumar-panda-dev/ | GitHub: github.com/pritish157
-Career Goal: Application Developer role — backend-heavy full-stack, ideally with real-time or AI features.
+Career Goal: Backend Developer / Software Engineer role — building high-throughput services, payment switches, and secure distributed architectures.
 
 Answer the user's question concisely and helpfully using this context. Keep responses under 150 words.`
 

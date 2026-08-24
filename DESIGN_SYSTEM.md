@@ -49,9 +49,10 @@ Each featured project has a unique accent color for visual distinction:
 
 | Project | Accent | Hex |
 |---|---|---|
-| Aradhana AstroAgent | Electric Blue | `#3B82F6` |
+| PayGuard | Emerald Green | `#10B981` |
 | Knot of Love | Violet | `#8B5CF6` |
 | Vireon | Fuchsia | `#A855F7` |
+| AstroAgent | Electric Blue | `#3B82F6` |
 | Fuel Route Optimisation | Deep Purple | `#7C3AED` |
 | ImageSteg | Light Purple | `#C084FC` |
 
